@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d3f5c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Jadwal Pembelajaran · SMK Negeri 1 Maluku Tengah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-deep:#0d3f5c;
+    --blue:#1a6fa3;
+    --green:#0e8f6f;
+    --green-deep:#0a5c47;
+    --gold:#e8a93b;
+    --gold-deep:#b9781a;
+    --cream:#f8f5ee;
+    --surface:#ffffff;
+    --ink:#152a26;
+    --muted:#5c6f6a;
+    --line:#e6e0d2;
+    --shadow: 0 10px 30px -12px rgba(13,63,92,0.22);
+    --radius: 16px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Plus Jakarta Sans', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    width:100%;
+    min-height:100dvh;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  img,svg{max-width:100%;}
+  button, a, input{touch-action:manipulation;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+  h1,h2,h3,.display{font-family:'Fraunces', serif;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    background:linear-gradient(120deg, var(--blue-deep) 0%, var(--blue) 38%, var(--green) 68%, var(--gold) 100%);
+    color:#fff;
+    padding:56px max(24px, env(safe-area-inset-right)) 96px max(24px, env(safe-area-inset-left));
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 12% 20%, rgba(255,255,255,0.14), transparent 40%),
+      radial-gradient(circle at 92% 10%, rgba(255,255,255,0.10), transparent 45%);
+    pointer-events:none;
+  }
+  .hero-inner{max-width:1180px; margin:0 auto; position:relative; z-index:2;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.35);
+    padding:6px 14px; border-radius:999px; font-weight:600;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold); box-shadow:0 0 0 3px rgba(232,169,59,0.35);}
+  .hero h1{
+    font-size:clamp(28px, 4.4vw, 46px);
+    line-height:1.08; font-weight:600; margin:18px 0 6px;
+    max-width:820px;
+  }
+  .hero p.sub{
+    font-size:16px; color:rgba(255,255,255,0.88); max-width:620px; margin:0 0 30px; font-weight:400;
+  }
+  .hero-meta{display:flex; flex-wrap:wrap; gap:10px 28px; font-size:13.5px; color:rgba(255,255,255,0.85); margin-bottom:32px;}
+  .hero-meta strong{color:#fff; font-weight:700;}
+
+  .searchbar{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    background:rgba(255,255,255,0.97);
+    border-radius:14px; padding:6px 6px 6px 18px;
+    max-width:640px; box-shadow:var(--shadow);
+  }
+  .searchbar svg{flex:none; color:var(--muted);}
+  .searchbar input{
+    border:none; outline:none; flex:1; min-width:140px; font-size:16px; padding:12px 4px;
+    color:var(--ink); background:transparent; font-family:inherit;
+  }
+  .searchbar input::placeholder{color:#9aa8a3;}
+  .clear-btn{
+    display:none; border:none; background:var(--cream); color:var(--muted);
+    width:32px;height:32px;border-radius:50%; cursor:pointer; align-items:center; justify-content:center; flex:none;
+  }
+  .clear-btn.show{display:inline-flex;}
+  .go-pill{
+    border:none; background:linear-gradient(120deg, var(--green-deep), var(--green));
+    color:#fff; font-weight:700; font-size:13px; padding:12px 18px; border-radius:10px;
+    cursor:default; white-space:nowrap; flex:none;
+  }
+
+  /* wave divider */
+  .wave{position:absolute; left:0; right:0; bottom:-1px; z-index:1; line-height:0;}
+  .wave svg{width:100%; height:64px; display:block;}
+
+  /* ===== TABS + FILTERS ===== */
+  .controls{
+    max-width:1180px; margin:-52px auto 0; padding:0 24px; position:relative; z-index:3;
+  }
+  .tabbar{
+    display:inline-flex; background:var(--surface); border-radius:14px; padding:5px;
+    box-shadow:var(--shadow); gap:4px;
+  }
+  .tab-btn{
+    border:none; background:transparent; cursor:pointer; padding:11px 22px;
+    font-weight:700; font-size:14.5px; border-radius:10px; color:var(--muted);
+    display:flex; align-items:center; gap:8px; transition:.18s;
+  }
+  .tab-btn.active{background:var(--ink); color:#fff;}
+  .tab-btn .count{
+    font-size:11.5px; font-weight:700; padding:1px 7px; border-radius:999px;
+    background:rgba(255,255,255,0.18); color:inherit;
+  }
+  .tab-btn:not(.active) .count{background:var(--cream); color:var(--muted);}
+
+  .filters{
+    display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 4px;
+  }
+  .chip{
+    border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    padding:8px 15px; border-radius:999px; font-size:13.5px; font-weight:600;
+    cursor:pointer; transition:.15s; display:flex; align-items:center; gap:6px;
+  }
+  .chip:hover{border-color:var(--blue);}
+  .chip.active{
+    background:var(--ink); border-color:var(--ink); color:#fff;
+  }
+  .chip .swatch{width:9px;height:9px;border-radius:50%;}
+
+  .result-line{margin:18px 2px 6px; font-size:13.5px; color:var(--muted); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;}
+  .legend{display:flex; gap:14px; font-size:12.5px; color:var(--muted); flex-wrap:wrap;}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .legend i{width:9px;height:9px;border-radius:3px; display:inline-block;}
+
+  /* ===== GRID ===== */
+  .grid-wrap{max-width:1180px; margin:0 auto; padding:8px 24px 80px;}
+  .grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(252px, 1fr));
+    gap:16px; margin-top:6px;
+  }
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:18px 18px 16px; cursor:pointer; position:relative; overflow:hidden;
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    display:flex; flex-direction:column; gap:12px; min-height:150px;
+  }
+  .card::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:5px;
+    background:var(--accent, var(--blue));
+  }
+  .card:hover{transform:translateY(-3px); box-shadow:var(--shadow); border-color:transparent;}
+  .card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+  .badge{
+    font-size:11px; font-weight:800; letter-spacing:.05em; padding:4px 9px; border-radius:7px;
+    background:color-mix(in srgb, var(--accent, var(--blue)) 14%, white); color:var(--accent, var(--blue));
+    white-space:nowrap;
+  }
+  .card h3{
+    font-size:17px; font-weight:600; margin:0; line-height:1.28; color:var(--ink);
+  }
+  .card .role{font-size:12.5px; color:var(--muted); font-weight:600;}
+  .card-actions{display:flex; gap:8px; margin-top:auto; padding-top:4px;}
+  .icon-btn{
+    border:1px solid var(--line); background:var(--cream); color:var(--ink);
+    width:40px; height:40px; min-width:40px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:.15s;
+  }
+  .icon-btn:hover, .icon-btn:active{background:var(--accent, var(--blue)); border-color:var(--accent, var(--blue)); color:#fff;}
+  .preview-btn{
+    flex:1; border:none; background:var(--ink); color:#fff; font-weight:700; font-size:13px;
+    border-radius:9px; padding:0 14px; height:40px; display:flex; align-items:center; justify-content:center; gap:7px;
+    cursor:pointer; transition:.15s;
+  }
+  .preview-btn:hover{background:var(--accent, var(--blue));}
+
+  .empty-state{
+    text-align:center; padding:70px 20px; color:var(--muted); display:none;
+  }
+  .empty-state.show{display:block;}
+  .empty-state .display{font-size:22px; color:var(--ink); margin-bottom:6px;}
+
+  /* ===== MODAL ===== */
+  .overlay{
+    position:fixed; inset:0; background:rgba(10,25,22,0.6); backdrop-filter:blur(3px);
+    display:none; align-items:center; justify-content:center; z-index:50; padding:20px;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:var(--surface); width:min(920px, 100%); height:min(84dvh, 780px);
+    border-radius:18px; overflow:hidden; display:flex; flex-direction:column;
+    box-shadow:0 30px 80px rgba(0,0,0,0.35);
+  }
+  .modal-head{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    padding:16px 20px; border-bottom:1px solid var(--line);
+    background:linear-gradient(120deg, var(--blue-deep), var(--green-deep));
+    color:#fff;
+  }
+  .modal-title{display:flex; align-items:center; gap:12px; min-width:0;}
+  .modal-title .badge{background:rgba(255,255,255,0.18); color:#fff;}
+  .modal-title h3{font-size:17px; margin:0; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .modal-actions{display:flex; gap:8px; flex:none;}
+  .mbtn{
+    border:1px solid rgba(255,255,255,0.4); background:rgba(255,255,255,0.12); color:#fff;
+    height:40px; padding:0 14px; border-radius:9px; font-size:13px; font-weight:700;
+    display:flex; align-items:center; gap:7px; cursor:pointer; transition:.15s; white-space:nowrap;
+  }
+  .mbtn:hover, .mbtn:active{background:#fff; color:var(--blue-deep);}
+  .mbtn.close{width:40px; padding:0; justify-content:center;}
+  .modal-body{position:relative; flex:1; background:#eef0ee;}
+  .modal-body iframe{width:100%; height:100%; border:none; position:relative; z-index:2; background:#fff;}
+  .loader{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:12px; color:var(--muted); z-index:1; font-size:13.5px; font-weight:600;
+  }
+  .spinner{width:34px; height:34px; border-radius:50%; border:3px solid var(--line); border-top-color:var(--blue); animation:spin 0.8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  footer{
+    text-align:center; padding:30px 20px 44px; color:var(--muted); font-size:12.5px; line-height:1.8;
+  }
+  footer strong{color:var(--ink);}
+
+  /* ===== TABLET (901–1080px): tighten hero + grid density ===== */
+  @media (max-width:1080px){
+    .hero h1{font-size:clamp(26px, 5vw, 38px);}
+    .grid{grid-template-columns:repeat(auto-fill, minmax(228px, 1fr));}
+  }
+
+  /* ===== TABLET / small laptop (max 900px) ===== */
+  @media (max-width:900px){
+    .hero{padding:48px max(20px, env(safe-area-inset-right)) 88px max(20px, env(safe-area-inset-left));}
+    .controls{padding:0 20px;}
+    .grid-wrap{padding:8px 20px 64px;}
+    .tabbar{width:100%; display:flex;}
+    .tab-btn{flex:1; justify-content:center;}
+  }
+
+  /* ===== PHONES (max 640px) ===== */
+  @media (max-width:640px){
+    .hero{padding:36px max(16px, env(safe-area-inset-right)) 80px max(16px, env(safe-area-inset-left));}
+    .hero-meta{gap:6px 18px; font-size:12.5px;}
+    .eyebrow{font-size:11px; padding:5px 12px;}
+    .controls{padding:0 16px; margin-top:-46px;}
+    .grid-wrap{padding:8px 16px 56px;}
+    .grid{grid-template-columns:repeat(auto-fill, minmax(min(100%,240px), 1fr));}
+    .filters{gap:6px;}
+    .chip{padding:7px 12px; font-size:13px;}
+    .result-line{flex-direction:column; align-items:flex-start;}
+
+    .overlay{padding:0; align-items:flex-end;}
+    .modal{
+      height:calc(92dvh - env(safe-area-inset-top));
+      max-height:calc(92dvh - env(safe-area-inset-top));
+      border-radius:16px 16px 0 0;
+      width:100%;
+    }
+    .modal-head{padding:14px 14px calc(14px) 16px; flex-wrap:wrap;}
+    .modal-title h3{max-width:150px; font-size:15.5px;}
+    .modal-actions{gap:6px;}
+    .mbtn span{display:none;}
+    .mbtn{width:40px; padding:0; justify-content:center;}
+    .modal-body{padding-bottom:env(safe-area-inset-bottom);}
+  }
+
+  /* ===== SMALL PHONES (max 380px) ===== */
+  @media (max-width:380px){
+    .hero h1{font-size:24px;}
+    .hero p.sub{font-size:14.5px;}
+    .searchbar{padding:5px 5px 5px 14px;}
+    .go-pill{display:none;}
+    .card{padding:15px 14px 14px;}
+    .card-actions{flex-wrap:wrap;}
+    .preview-btn{flex-basis:100%;}
+  }
+
+  /* ===== SHORT / LANDSCAPE PHONES ===== */
+  @media (max-height:480px) and (orientation:landscape){
+    .hero{padding:24px max(20px, env(safe-area-inset-right)) 60px max(20px, env(safe-area-inset-left));}
+    .hero-meta, .eyebrow{display:none;}
+    .hero p.sub{margin-bottom:16px;}
+    .overlay{align-items:center; padding:14px;}
+    .modal{height:min(94vh, 480px); border-radius:16px;}
+  }
+
+  /* ===== LARGE / DESKTOP DISPLAYS ===== */
+  @media (min-width:1440px){
+    .hero-inner, .controls, .grid-wrap{max-width:1320px;}
+    .grid{grid-template-columns:repeat(auto-fill, minmax(268px, 1fr));}
+  }
+
+  /* ===== HOVER-CAPABLE DEVICES ONLY: avoid sticky hover state on touch ===== */
+  @media (hover:none){
+    .card:hover{transform:none; box-shadow:none; border-color:var(--line);}
+    .card:active{transform:scale(0.99);}
+  }
+
+  :focus-visible{outline:2.5px solid var(--gold); outline-offset:2px;}
+
+  @media print{
+    .hero .searchbar, .wave, .controls, footer{display:none;}
+    .hero{background:none; color:var(--ink); padding:0 0 16px;}
+    .hero-inner{max-width:100%;}
+    .card{break-inside:avoid;}
+    .card-actions{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow"><span class="dot"></span>Tahun Pelajaran 2026 / 2027</span>
+    <h1>Jadwal Pembelajaran<br>SMK Negeri 1 Maluku Tengah</h1>
+    <p class="sub">Portal jadwal untuk seluruh kelas dan guru — cari, pratinjau langsung di layar, lalu unduh atau cetak berkas PDF-nya.</p>
+    <div class="hero-meta">
+      <span><strong id="metaKelas">0</strong> jadwal kelas</span>
+      <span><strong id="metaGuru">0</strong> jadwal guru</span>
+      <span>Diperbarui <strong>6 Agustus 2026</strong></span>
+    </div>
+    <div class="searchbar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Cari nama kelas atau nama guru…" autocomplete="off">
+      <button class="clear-btn" id="clearBtn" title="Hapus pencarian">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <span class="go-pill" id="totalPill">76 berkas</span>
+    </div>
+  </div>
+  <div class="wave">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path fill="#f8f5ee" d="M0,48 C220,90 420,0 720,32 C1020,64 1240,10 1440,40 L1440,80 L0,80 Z"/></svg>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="tabbar">
+    <button class="tab-btn active" data-tab="kelas">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Jadwal Kelas <span class="count" id="cntKelas">0</span>
+    </button>
+    <button class="tab-btn" data-tab="guru">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Jadwal Guru <span class="count" id="cntGuru">0</span>
+    </button>
+  </div>
+
+  <div class="filters" id="filterTingkat"></div>
+  <div class="filters" id="filterJurusan"></div>
+
+  <div class="result-line">
+    <span id="resultCount"></span>
+    <span class="legend" id="legendBox"></span>
+  </div>
+</div>
+
+<main class="grid-wrap">
+  <div class="grid" id="grid"></div>
+  <div class="empty-state" id="emptyState">
+    <div class="display">Tidak ditemukan</div>
+    <div>Coba kata kunci lain, atau hapus filter yang aktif.</div>
+  </div>
+</main>
+
+<footer>
+  <div><strong>SMK Negeri 1 Maluku Tengah</strong> · Masohi, Provinsi Maluku</div>
+  <div>Berkas jadwal ditampilkan langsung dari Google Drive sekolah. Gunakan tombol pratinjau untuk membuka, lalu unduh atau cetak sesuai kebutuhan.</div>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">
+        <span class="badge" id="modalBadge">—</span>
+        <h3 id="modalName">Nama Jadwal</h3>
+      </div>
+      <div class="modal-actions">
+        <a class="mbtn" id="downloadBtn" href="#" target="_blank" rel="noopener">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Unduh</span>
+        </a>
+        <a class="mbtn" id="printBtn" href="#" target="_blank" rel="noopener">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span>Cetak</span>
+        </a>
+        <button class="mbtn close" id="closeBtn" title="Tutup">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <div>Memuat pratinjau PDF…</div>
+      </div>
+      <iframe id="previewFrame" src="" title="Pratinjau jadwal" allow="autoplay"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= DATA ================= */
+const TINGKAT_COLOR = { X:"#1a6fa3", XI:"#0e8f6f", XII:"#b9781a" };
+
+const KELAS = [
+  {name:"X MPLB",   id:"14qggP2yZPifV4j6bf4FkoS9R_eAuBVs4", tingkat:"X",   jurusan:"MPLB"},
+  {name:"X AKL",     id:"1UI6lD9vIS3mOHoj-XPacOeW-yIfU85rf", tingkat:"X",   jurusan:"AKL"},
+  {name:"X PMS",     id:"1tEtOxC-m7awgslhbz3CqsCuGY9so9Kxa", tingkat:"X",   jurusan:"PMS"},
+  {name:"X ULP",     id:"1stN4nXefxAcO4FdaunzzW5QlRsl1t6J3", tingkat:"X",   jurusan:"ULP"},
+  {name:"X TJKT 1",  id:"1wI8iLo7I3I2u4XJ0zKPWMY7hygBz0QfD", tingkat:"X",   jurusan:"TJKT"},
+  {name:"X TJKT 2",  id:"1l0K1DKcd2i3VIr1Sl3a0crW8Hr0lPMh6", tingkat:"X",   jurusan:"TJKT"},
+  {name:"X TK 1",    id:"1CCsqLcfwE13_3J0lCacLoxqKeqI8vrMX", tingkat:"X",   jurusan:"TK"},
+  {name:"X TK 2",    id:"1vxFhEEaKVp2kR_5d6LqyM2nYo3f5HVSf", tingkat:"X",   jurusan:"TK"},
+  {name:"XI MPLB",   id:"18N8f6Aj9MGzNLPoSXzvkktgPS0YqXi7D", tingkat:"XI",  jurusan:"MPLB"},
+  {name:"XI AKL",    id:"1So-zAPetNsCD8gvdzA4xZ5scGSV19Sl_", tingkat:"XI",  jurusan:"AKL"},
+  {name:"XI PMS",    id:"1E8pCqQi_ibviMRy97spINbh12cHMY3B9", tingkat:"XI",  jurusan:"PMS"},
+  {name:"XI ULP",    id:"1gbaGrm4_wa-RvcsDMZmGvhEQ-ZZP9Wyl", tingkat:"XI",  jurusan:"ULP"},
+  {name:"XI TJKT 1", id:"12XaPE--toMMXTbimwYKK9m_a4CvDKKMN", tingkat:"XI",  jurusan:"TJKT"},
+  {name:"XI TJKT 2", id:"1T9PhHgeb5OApoxUIl2sKYJnA3G4_0grP", tingkat:"XI",  jurusan:"TJKT"},
+  {name:"XI TK 1",   id:"1sVko9A4HpkE7AKAD1l-IAr3OwYml9hsU", tingkat:"XI",  jurusan:"TK"},
+  {name:"XI TK 2",   id:"16PlnDnWFFv4v8fIUe6CiRf3PyK1718MK", tingkat:"XI",  jurusan:"TK"},
+  {name:"XII MPLB",  id:"1xwTvxhT3-knxh1ed-mhGDCK1xIzQrDi6", tingkat:"XII", jurusan:"MPLB"},
+  {name:"XII AKL",   id:"1wFdWrVMd_Rlu-4KaHUsqTbO3ANPdUOFw", tingkat:"XII", jurusan:"AKL"},
+  {name:"XII PMS",   id:"12I8WPgldfyKn6M_ok7Fmg8gzZFTVpCHU", tingkat:"XII", jurusan:"PMS"},
+  {name:"XII ULP",   id:"1IMNCQS64ZJIKUzNJKHqO5gU1EVHZlYNY", tingkat:"XII", jurusan:"ULP"},
+  {name:"XII TJKT 1",id:"1GQ9LECUwCkO0WhG1J9cmZg6RqrC8_orZ", tingkat:"XII", jurusan:"TJKT"},
+  {name:"XII TJKT 2",id:"1EPLxV-BmhzwsW4HoliaCkZPg0HRZOGuX", tingkat:"XII", jurusan:"TJKT"},
+  {name:"XII TK",    id:"1OlczNDwQ_8sI8x45s0TM9xWJfR32qDFg", tingkat:"XII", jurusan:"TK"},
+].map(d => ({...d, type:"kelas"}));
+
+const GURU = [
+  {name:"A. Bahy, S.Pd., M.Pd", id:"1qjFPboHlABDFRA72-zQX2JDF9BokaSWl"},
+  {name:"E.A. Wacanno, S.Pd", id:"1iyrkaMyAD-6gH-saEyHsEk86DLiDN_bW"},
+  {name:"O.A. Lawalata, S.Pd", id:"1PlY1ltfRpK_POBrq8nRSnSQaHc0iMV8O"},
+  {name:"A. Leuwol, S.Pd", id:"1JcEu3MTR01I66Z-NWb7Vt0Sp-kIpvuZ0"},
+  {name:"B.W. Tanamal, S.Pd", id:"125uyVFEhXtdauM7tJbhlUWVkyFu8KSgw"},
+  {name:"T.M.A. Kappuw, S.Pd", id:"1E1tBkUj2gxfTOu688X9ycWmTaTtFu4U7"},
+  {name:"R. Lewenussa, S.Pd", id:"1jJzCgaPwX_VgsS7asZm5zwr36IyfH_5L"},
+  {name:"Yulan Talarima, S.Pd., Gr", id:"1xJppEh1EJDUinMcRz-xFsvMTjMyh4u3T"},
+  {name:"S. Singadji, S.Kom", id:"1uqVOQQyHYEcLkE09cETfDT7gmCmfX9kY"},
+  {name:"N. Ch. Elias, S.Pd., M.Pd", id:"1xZbYk8saC9fK17cyQAO6dJefWAVtWsq9"},
+  {name:"A. Dj. Tuasikal, S.Pd., M.Si", id:"1ex3zQHIfPCGUpNcyzxTRLtSY5ewJMAby"},
+  {name:"D. Simaela, S.Pd", id:"1RDrmlrUoDwwePr3lFeZiJUVwLzP9jLpm"},
+  {name:"R. Nilapantjuran, S.Pd", id:"1G4OgAqjHy1fzwYeA391HLb4ZGce1OtLF"},
+  {name:"R. E. Ruhukail, S.Pd., M.Pd", id:"15Od0UzaQzXKu9I-rNf_OE3d0V_70k9gC"},
+  {name:"T.S. Polnaya, S.Th", id:"1QxsMVPFNR3tRvKZvHHDzR8mLhc8Wpl2F"},
+  {name:"Djumiaty, S.PdI", id:"1SR93yr5PpsJRxh5H8oJaiHthzmgKnlCD"},
+  {name:"F.L. Pelletimu, S.Th", id:"1NfeUeV0RhPy9PUi6ejNJv44rzwOAOydV"},
+  {name:"V. Ruhukail, S.Pd", id:"1sYyAK8OEwizoPrxWCTOvBj0W9JsQ0yRg"},
+  {name:"Dahasian, S.Pd., Gr", id:"1qwqks_9VbM5CgGgPJRJqi1A2niLZSyII"},
+  {name:"H. Salampessy, SE", id:"1v5bF16WDDO67hi5wW1Lw4QyZwY8--I-2"},
+  {name:"H.S. Kapressy, S.Pd., M.Pd", id:"1fux64Zgn6MGlRzA3FE1VxYFZdv9qMXuM"},
+  {name:"M. Kunu, S.Pd", id:"18y6ooHl-Sqs06DQAFF1uW3mmMT0ZI1Mb"},
+  {name:"Dani Iswanti, S.Sos", id:"1wC5w1HNcppyGCQwdLgh4c4tsuSd1KVSU"},
+  {name:"A. A.W.J. Soplantila, S.Tr.Par", id:"1Y1pY8uU5jXQ4KaeKX1L4f8NXRgj2srLe"},
+  {name:"Daud Ali Pakan, S.Pd", id:"1MsK9F_f9eeUuKP1JyrOqduIoGWxLqJvD"},
+  {name:"Marwana Nurdin, SST", id:"15q-RM-RlJkisuBcF7940NkMLgo6e1YM-"},
+  {name:"Kalsum Mony, S.Pd", id:"1655dc8OmtuiHyJtLJdWORJnosIJrhFq9"},
+  {name:"Abdul Manan Payapo, S.T", id:"1WfkS7rLjcyStnMsuws5KIoxF2Flam1kI"},
+  {name:"R. A. Ririhena, SM.Gr", id:"1J0qqFkd6Nfliw3cbbITjg-IiV0Ixnzj3"},
+  {name:"Latumeirissa Allcresdo", id:"1C5QgstqgY4MypD9yRTjdpLgA9nYXb4kz"},
+  {name:"M. Siwabessy, S.Tr.Par", id:"1IQ_AATlDxX8NxQtDdCMFNa9vd4ESX0OV"},
+  {name:"E. Tamaela, A.Md", id:"1hKBdoPLpKdC23duEGUH19_K21dQS9xJ4"},
+  {name:"Wa Mulina, S.Pd", id:"1p_ytXLoUPo2moPoOGX_ITSfMnQ0tzfOA"},
+  {name:"Tuasikal Boki", id:"1CsL2zCEN_snuOnRtrzqYrbG1_4M1zsiU"},
+  {name:"Papuangan Syamsudin, A.Md", id:"1eLhXzLiNrJILtWVOEhH1IE8M7FEQa3Nj"},
+  {name:"Diwanti Wally, A.Md", id:"1FZSOkSCjj9-AZs0GuGlYbUBpAquayQEG"},
+  {name:"J. Resiloy", id:"1XKRUcQmtZo8D0u0yvmfD8tqTX02uZ4r-"},
+  {name:"Lukas M. Wacanno, S.Pd", id:"1AKh3WNGZLyx24C14dHS3mtEAW6_xzRBf"},
+  {name:"Mani Jamaludin, S.Kom", id:"1Coq4Fr8T050Z32LF6hqO5dbkbQhSsf1C"},
+  {name:"Gloria Stevana Pattiradjawane, S.Tr.TI", id:"1PXtNhCgg9eGv8goM-DmBDw_Si-0IjpeB"},
+  {name:"Netri Wailaruno, S.Pd", id:"1CpeEPT3w96DiV7ClP38erNlK7aX5i-ul"},
+  {name:"Axl Denis Hallatu, S.Kom", id:"1RrE1YSqAuLu1-DLNLZvxGU4MwiD9QE10"},
+  {name:"R.Y. Ririhena, S.PdKom", id:"1WIcDeLPGlRF4Vn_Tf7pKCJ1tspSFzkvA"},
+  {name:"Suharja Duhalim, S.Pd", id:"1J5shVKwG3OT_bM3yl77zrblfBjZZ3qbZ"},
+  {name:"Efrem More Meto, S.Fil", id:"1N0tnqwogdHR0hSiTpy7RyYRy17pBFNhz"},
+  {name:"Budiarto Tahidi, S.Pd", id:"1cnS7g2cIbnkMnKvBfCL9qW6Upn56buBd"},
+  {name:"Ratmala, S.AP Vineske", id:"1lBONsetPPatD3Wm5QYM1YbcFF442HjfT"},
+  {name:"Guru Pembimbing PKL & KK — MPLB", id:"1M98YXj6MAAJ943t9zp3yPJDeb6727O1U", pkl:true},
+  {name:"Guru Pembimbing PKL & KK — AKL", id:"1OJ1XSNcNEcXCU_Wmghe_tLITREtMflNb", pkl:true},
+  {name:"Guru Pembimbing PKL & KK — PMS", id:"1uB_X4VEevBEAFlBh_QmYjQAUmaXWRix2", pkl:true},
+  {name:"Guru Pembimbing PKL & KK — ULP", id:"1WlsrrQ0ji1enxrnH4u6zVPd-MOU2AXpp", pkl:true},
+  {name:"Guru Pembimbing PKL & KK — TJKT", id:"1c4RNshdtrjs2ugu1E1bKrdNaeSfKC91c", pkl:true},
+  {name:"Guru Pembimbing PKL & KK — TK", id:"1zOMORTGp1d-aaXWIhqLejnXhrvXHWfdK", pkl:true},
+].map(d => ({...d, type:"guru"}));
+
+const ALL = [...KELAS, ...GURU];
+
+/* ================= STATE ================= */
+let state = { tab:"kelas", search:"", tingkat:"Semua", jurusan:"Semua" };
+
+const JURUSAN_LIST = ["Semua","MPLB","AKL","PMS","ULP","TJKT","TK"];
+const TINGKAT_LIST = ["Semua","X","XI","XII"];
+
+/* ================= RENDER ================= */
+const grid = document.getElementById('grid');
+const emptyState = document.getElementById('emptyState');
+const resultCount = document.getElementById('resultCount');
+
+function iconEye(){
+  return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+function iconDownload(){
+  return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+}
+function iconPrint(){
+  return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>`;
+}
+
+function buildFilters(){
+  const tCol = document.getElementById('filterTingkat');
+  const jCol = document.getElementById('filterJurusan');
+  tCol.innerHTML = '';
+  jCol.innerHTML = '';
+
+  if(state.tab === 'kelas'){
+    tCol.style.display = 'flex';
+    jCol.style.display = 'flex';
+    TINGKAT_LIST.forEach(t => {
+      const el = document.createElement('button');
+      el.className = 'chip' + (state.tingkat===t ? ' active':'');
+      const sw = t==='Semua' ? '#152a26' : TINGKAT_COLOR[t];
+      el.innerHTML = `<span class="swatch" style="background:${sw}"></span>${t==='Semua'?'Semua Tingkat':'Kelas '+t}`;
+      el.onclick = () => { state.tingkat = t; render(); };
+      tCol.appendChild(el);
+    });
+    JURUSAN_LIST.forEach(j => {
+      const el = document.createElement('button');
+      el.className = 'chip' + (state.jurusan===j ? ' active':'');
+      el.textContent = j==='Semua' ? 'Semua Jurusan' : j;
+      el.onclick = () => { state.jurusan = j; render(); };
+      jCol.appendChild(el);
+    });
+  } else {
+    tCol.style.display = 'none';
+    jCol.style.display = 'none';
+  }
+}
+
+function buildLegend(){
+  const box = document.getElementById('legendBox');
+  if(state.tab === 'kelas'){
+    box.innerHTML = ['X','XI','XII'].map(t=>`<span><i style="background:${TINGKAT_COLOR[t]}"></i>Kelas ${t}</span>`).join('');
+  } else {
+    box.innerHTML = '';
+  }
+}
+
+function filteredData(){
+  const src = state.tab === 'kelas' ? KELAS : GURU;
+  const q = state.search.trim().toLowerCase();
+  return src.filter(d => {
+    if(q && !d.name.toLowerCase().includes(q)) return false;
+    if(state.tab === 'kelas'){
+      if(state.tingkat !== 'Semua' && d.tingkat !== state.tingkat) return false;
+      if(state.jurusan !== 'Semua' && d.jurusan !== state.jurusan) return false;
+    }
+    return true;
+  });
+}
+
+function cardHTML(d){
+  const accent = d.type === 'kelas' ? TINGKAT_COLOR[d.tingkat] : '#0d3f5c';
+  const badgeText = d.type === 'kelas' ? `Kelas ${d.tingkat} · ${d.jurusan}` : (d.pkl ? 'Pembimbing PKL & KK' : 'Guru Pengajar');
+  return `
+    <div class="card" style="--accent:${accent}" data-id="${d.id}" data-name="${escapeHtml(d.name)}" data-badge="${escapeHtml(badgeText)}">
+      <div class="card-top">
+        <span class="badge">${badgeText}</span>
+      </div>
+      <h3>${escapeHtml(d.name)}</h3>
+      <div class="card-actions">
+        <button class="preview-btn" data-action="preview">${iconEye()} Pratinjau</button>
+        <a class="icon-btn" data-action="download" href="https://drive.google.com/uc?export=download&id=${d.id}" target="_blank" rel="noopener" title="Unduh PDF">${iconDownload()}</a>
+        <a class="icon-btn" data-action="print" href="https://drive.google.com/file/d/${d.id}/view" target="_blank" rel="noopener" title="Buka untuk dicetak">${iconPrint()}</a>
+      </div>
+    </div>`;
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function render(){
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === state.tab));
+  buildFilters();
+  buildLegend();
+
+  const data = filteredData();
+  grid.innerHTML = data.map(cardHTML).join('');
+  emptyState.classList.toggle('show', data.length === 0);
+
+  const label = state.tab === 'kelas' ? 'kelas' : 'guru';
+  resultCount.textContent = `Menampilkan ${data.length} dari ${state.tab==='kelas'?KELAS.length:GURU.length} jadwal ${label}`;
+
+  grid.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      const action = e.target.closest('[data-action]')?.dataset.action;
+      if(action === 'download' || action === 'print') return; // let native link work
+      openModal(card.dataset.id, card.dataset.name, card.dataset.badge);
+    });
+  });
+}
+
+/* ================= MODAL ================= */
+const overlay = document.getElementById('overlay');
+const frame = document.getElementById('previewFrame');
+const loader = document.getElementById('loader');
+
+function openModal(id, name, badge){
+  document.getElementById('modalName').textContent = name;
+  document.getElementById('modalBadge').textContent = badge;
+  document.getElementById('downloadBtn').href = `https://drive.google.com/uc?export=download&id=${id}`;
+  document.getElementById('printBtn').href = `https://drive.google.com/file/d/${id}/view`;
+  loader.style.display = 'flex';
+  frame.src = `https://drive.google.com/file/d/${id}/preview`;
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  overlay.classList.remove('show');
+  frame.src = '';
+  document.body.style.overflow = '';
+}
+frame.addEventListener('load', () => { loader.style.display = 'none'; });
+document.getElementById('closeBtn').addEventListener('click', closeModal);
+overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+
+/* ================= EVENTS ================= */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.tab = btn.dataset.tab;
+    state.tingkat = 'Semua';
+    state.jurusan = 'Semua';
+    render();
+  });
+});
+
+const searchInput = document.getElementById('searchInput');
+const clearBtn = document.getElementById('clearBtn');
+searchInput.addEventListener('input', () => {
+  state.search = searchInput.value;
+  clearBtn.classList.toggle('show', state.search.length > 0);
+  render();
+});
+clearBtn.addEventListener('click', () => {
+  searchInput.value = '';
+  state.search = '';
+  clearBtn.classList.remove('show');
+  render();
+});
+
+/* ================= INIT ================= */
+document.getElementById('metaKelas').textContent = KELAS.length;
+document.getElementById('metaGuru').textContent = GURU.length;
+document.getElementById('cntKelas').textContent = KELAS.length;
+document.getElementById('cntGuru').textContent = GURU.length;
+document.getElementById('totalPill').textContent = `${ALL.length} berkas`;
+
+render();
+</script>
+</body>
+</html>
