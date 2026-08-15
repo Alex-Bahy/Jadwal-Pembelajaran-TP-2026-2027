@@ -2,592 +2,785 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jadwal Pembelajaran — SMK Negeri 1 Maluku Tengah</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Papan Jadwal — SMK Negeri 1 Maluku Tengah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy-900:#0f2942;
-    --navy-800:#163350;
-    --navy-700:#1c3f5f;
-    --gold-500:#c89b3c;
-    --gold-300:#e0c377;
-    --paper:#f7f5ef;
-    --paper-line:#e2ddd0;
-    --ink:#1c1c1a;
-    --ink-soft:#57544c;
-    --break-bg:#efe6cf;
-    --card-bg:#ffffff;
-    --radius:10px;
+    --paper:#F5F1E6;
+    --card:#FDFBF4;
+    --ink:#12262B;
+    --ink-soft:#4B5C5F;
+    --teal:#1F6F64;
+    --teal-dark:#123D38;
+    --amber:#C77B3D;
+    --gold:#E3B23C;
+    --line:#DCD2B4;
+    --shadow: 0 10px 28px -14px rgba(18,38,43,.35);
+    --radius:16px;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
   body{
+    margin:0;
     background:var(--paper);
-    color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:60px;
-  }
-
-  /* ---------- Letterhead ---------- */
-  header.letterhead{
-    background:linear-gradient(135deg,var(--navy-900),var(--navy-800) 60%,var(--navy-700));
-    color:#f4efe2;
-    padding:28px 20px 24px;
-    position:relative;
-    overflow:hidden;
-    border-bottom:4px solid var(--gold-500);
-  }
-  header.letterhead::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    opacity:.12;
     background-image:
-      repeating-linear-gradient(45deg, var(--gold-300) 0 2px, transparent 2px 22px),
-      repeating-linear-gradient(-45deg, var(--gold-300) 0 2px, transparent 2px 22px);
-    pointer-events:none;
+      radial-gradient(circle at 12% 8%, rgba(31,111,100,.06), transparent 40%),
+      radial-gradient(circle at 90% 4%, rgba(199,123,61,.08), transparent 45%);
+    color:var(--ink);
+    font-family:'Work Sans', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
   }
-  .letterhead-inner{position:relative;max-width:1100px;margin:0 auto;text-align:center;}
-  .letterhead-badge{
-    display:inline-block;
-    font-size:11px;
+  a{color:inherit;}
+
+  /* ---------- Header ---------- */
+  header.top{
+    padding:clamp(28px,5vw,52px) clamp(18px,5vw,64px) 20px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
     letter-spacing:.14em;
     text-transform:uppercase;
-    border:1px solid var(--gold-300);
-    color:var(--gold-300);
-    padding:4px 12px;
-    border-radius:999px;
+    color:var(--teal-dark);
+    display:flex;
+    align-items:center;
+    gap:10px;
     margin-bottom:10px;
   }
-  h1.school-name{
-    font-family:Georgia,"Times New Roman",serif;
-    font-weight:700;
-    font-size:clamp(20px,4.2vw,32px);
-    margin:0 0 4px;
-    letter-spacing:.01em;
+  .eyebrow::before{
+    content:"";
+    width:22px;height:2px;background:var(--amber);
+    display:inline-block;
   }
-  .school-sub{
-    font-size:clamp(13px,2.6vw,16px);
-    color:#d8cfae;
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(28px,4.4vw,44px);
+    line-height:1.08;
+    margin:0 0 8px;
+    letter-spacing:-.01em;
+  }
+  h1 span{color:var(--teal);font-style:italic;font-weight:500;}
+  .sub{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:640px;
+    line-height:1.55;
     margin:0;
   }
-  .ta-year{
-    display:inline-block;
-    margin-top:12px;
-    font-family:Georgia,serif;
-    font-size:13px;
-    letter-spacing:.05em;
-    color:var(--navy-900);
-    background:var(--gold-300);
-    padding:3px 14px;
-    border-radius:999px;
-    font-weight:700;
+  .year-badge{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; font-weight:600; letter-spacing:.06em;
+    background:var(--teal-dark); color:var(--gold);
+    padding:4px 10px; border-radius:999px;
+    display:inline-flex; align-items:center; gap:6px;
+    margin-left:2px;
+  }
+  .year-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);}
+
+  /* ---------- Announcement ---------- */
+  .announce{
+    margin:18px clamp(18px,5vw,64px) 0;
+    background:linear-gradient(90deg, rgba(199,123,61,.14), rgba(227,178,60,.10));
+    border:1px solid rgba(199,123,61,.4);
+    border-left:4px solid var(--amber);
+    border-radius:12px;
+    padding:13px 18px;
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+  }
+  .announce .ico{
+    font-size:18px; line-height:1; flex-shrink:0; margin-top:1px;
+  }
+  .announce .txt{font-size:13.5px; line-height:1.55; color:var(--ink);}
+  .announce .txt strong{color:var(--teal-dark);}
+  .announce .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--amber); font-weight:600; display:block; margin-bottom:3px;
   }
 
-  /* ---------- Controls ---------- */
-  .controls{
-    max-width:1100px;
-    margin:18px auto 0;
-    padding:0 16px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    align-items:center;
+  /* ---------- Controls (the "board") ---------- */
+  .board-controls{
+    position:sticky; top:0; z-index:20;
+    background:rgba(245,241,230,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    padding:14px clamp(18px,5vw,64px);
+    display:flex; flex-wrap:wrap; gap:14px; align-items:center;
   }
-  .seg{
-    display:flex;
-    background:#fff;
-    border:1px solid var(--paper-line);
+  .tabs{
+    --n:3; --i:0;
+    position:relative;
+    display:inline-flex;
+    background:var(--teal-dark);
     border-radius:999px;
-    padding:3px;
-    box-shadow:0 1px 2px rgba(15,41,66,.06);
+    padding:4px;
+    flex-shrink:0;
   }
-  .seg button{
-    border:none;
-    background:transparent;
-    padding:8px 16px;
-    font-size:14px;
-    font-weight:600;
-    color:var(--ink-soft);
+  .tabs button{
+    position:relative; z-index:2;
+    border:0; background:transparent; cursor:pointer;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:#CFE3DE;
+    padding:9px 18px;
     border-radius:999px;
-    cursor:pointer;
-    transition:.15s;
+    transition:color .25s ease;
   }
-  .seg button.active{
-    background:var(--navy-900);
-    color:#fff;
+  .tabs button.active{color:var(--teal-dark);}
+  .tabs .thumb{
+    position:absolute; top:4px; bottom:4px; left:4px;
+    width:calc((100% - 8px) / var(--n));
+    background:var(--gold);
+    border-radius:999px;
+    transition:transform .32s cubic-bezier(.65,0,.35,1);
+    z-index:1;
+    transform:translateX(calc(var(--i) * 100%));
   }
-  select, input[type="text"]{
-    border:1px solid var(--paper-line);
-    background:#fff;
-    border-radius:8px;
-    padding:9px 12px;
-    font-size:14px;
+
+  .search-wrap{
+    flex:1 1 240px;
+    position:relative;
+    min-width:200px;
+  }
+  .search-wrap input{
+    width:100%;
+    font-family:'Work Sans', sans-serif;
+    font-size:14.5px;
+    padding:10px 14px 10px 36px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--card);
     color:var(--ink);
-    min-width:150px;
-    flex:1 1 150px;
+    outline:none;
+    transition:border-color .2s ease, box-shadow .2s ease;
   }
-  input[type="text"]{flex:1 1 180px;}
-  .btn-ghost{
-    border:1px solid var(--navy-700);
-    background:#fff;
-    color:var(--navy-800);
-    border-radius:8px;
-    padding:9px 14px;
-    font-size:14px;
-    font-weight:600;
-    cursor:pointer;
+  .search-wrap input:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(31,111,100,.15);
   }
-  .btn-ghost:hover{background:var(--navy-900);color:#fff;}
-
-  main{max-width:1100px;margin:18px auto;padding:0 16px;}
-
-  .panel-title{
-    font-family:Georgia,serif;
-    font-size:19px;
-    margin:6px 0 12px;
-    color:var(--navy-900);
+  .search-wrap::before{
+    content:"⌕";
+    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    font-size:16px; color:var(--ink-soft);
+  }
+  .count{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; color:var(--ink-soft);
+    white-space:nowrap;
   }
 
-  /* ---------- Legend ---------- */
-  #legend{
-    display:flex;flex-wrap:wrap;gap:8px 14px;
-    margin:10px 0 18px;
-    font-size:12.5px;
-    color:var(--ink-soft);
+  /* ---------- Main / grid ---------- */
+  main{padding:28px clamp(18px,5vw,64px) 70px;}
+  .tier{margin-bottom:34px;}
+  .tier h2{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--amber);
+    display:flex; align-items:center; gap:10px;
+    margin:0 0 14px;
   }
-  #legend .chip{display:flex;align-items:center;gap:6px;}
-  #legend .swatch{width:11px;height:11px;border-radius:3px;display:inline-block;}
+  .tier h2::after{content:"";flex:1;height:1px;background:var(--line);}
 
-  /* ---------- Grid table (tablet/desktop) ---------- */
-  .grid-wrap{overflow-x:auto;border:1px solid var(--paper-line);border-radius:var(--radius);background:#fff;}
-  table.grid{border-collapse:collapse;width:100%;min-width:900px;font-size:12.5px;}
-  table.grid th, table.grid td{
-    border:1px solid var(--paper-line);
-    padding:6px 5px;
-    text-align:center;
-    vertical-align:middle;
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
+    gap:14px;
   }
-  table.grid thead th{
-    background:var(--navy-900);
-    color:#f4efe2;
-    font-weight:600;
-    font-size:11.5px;
-  }
-  table.grid thead th .ptime{display:block;font-weight:400;font-size:10px;color:#c9d3dd;}
-  table.grid td.daycell{
-    background:var(--navy-800);
-    color:#fff;
-    font-weight:700;
-    writing-mode:horizontal-tb;
-    min-width:64px;
-  }
-  table.grid td.break{background:var(--break-bg);color:var(--ink-soft);font-size:10.5px;writing-mode:vertical-rl;text-orientation:mixed;}
-  table.grid td.slot .subject{display:block;font-weight:700;font-size:12px;margin-bottom:2px;}
-  table.grid td.slot .teacher{display:block;font-size:10.5px;color:var(--ink-soft);}
-  table.grid td.slot{min-width:80px;}
-  td.dim{opacity:.35;}
-  td.hit{outline:2px solid var(--gold-500);outline-offset:-2px;}
 
-  /* ---------- Mobile accordion ---------- */
-  .day-card{
-    background:var(--card-bg);
-    border:1px solid var(--paper-line);
+  .card{
+    display:flex;
+    background:var(--card);
+    border:1px solid var(--line);
     border-radius:var(--radius);
-    margin-bottom:10px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    transition:transform .18s ease, border-color .18s ease;
+  }
+  .card:hover, .card:focus-within{
+    transform:translateY(-3px);
+    border-color:var(--amber);
+  }
+  .stub{
+    width:52px; flex-shrink:0;
+    background:repeating-linear-gradient(180deg, transparent 0 6px, var(--line) 6px 7px);
+    border-right:2px dashed var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px; font-weight:600;
+    color:var(--teal);
+    background-color:rgba(31,111,100,.05);
+  }
+  .card-main{
+    display:flex; flex-direction:column; flex:1; min-width:0;
+  }
+  .card-open{
+    all:unset;
+    box-sizing:border-box;
+    display:flex; flex-direction:column; gap:6px;
+    cursor:pointer;
+    padding:14px 16px 12px;
+    width:100%;
+  }
+  .card-name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:16.5px;
+    line-height:1.25;
+    overflow-wrap:anywhere;
+  }
+  .card-cta{
+    margin-top:auto;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--amber);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .card-cta::after{content:"→"; transition:transform .18s ease;}
+  .card-open:hover .card-cta::after, .card-open:focus-visible .card-cta::after{transform:translateX(3px);}
+
+  .card-actions{
+    display:flex;
+    border-top:1px dashed var(--line);
+  }
+  .action-btn{
+    all:unset;
+    box-sizing:border-box;
+    flex:1;
+    cursor:pointer;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--ink-soft);
+    padding:9px 6px;
+    display:flex; align-items:center; justify-content:center; gap:5px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .action-btn:not(:last-child){border-right:1px dashed var(--line);}
+  .action-btn:hover, .action-btn:focus-visible{background:rgba(31,111,100,.09); color:var(--teal);}
+  .action-btn[data-action="print"]:hover, .action-btn[data-action="print"]:focus-visible{
+    background:rgba(199,123,61,.10); color:var(--amber);
+  }
+
+  .empty{
+    grid-column:1/-1;
+    text-align:center;
+    padding:50px 20px;
+    color:var(--ink-soft);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+  }
+
+  /* ---------- Piket live ---------- */
+  .piket-live{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px 20px; box-shadow:var(--shadow); margin-bottom:16px;
+  }
+  .live-dot{
+    width:11px; height:11px; border-radius:50%; flex-shrink:0;
+    background:#2FA84F;
+    animation:pulse 1.8s infinite;
+  }
+  .piket-live.off .live-dot{background:var(--ink-soft); animation:none;}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(47,168,79,.5);}
+    70%{box-shadow:0 0 0 9px rgba(47,168,79,0);}
+    100%{box-shadow:0 0 0 0 rgba(47,168,79,0);}
+  }
+  .live-text{display:flex; flex-direction:column; gap:2px;}
+  .live-tag{font-family:'Fraunces', serif; font-weight:600; font-size:16.5px;}
+  .live-sub{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-soft);}
+  .live-clock{
+    margin-left:auto;
+    font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:600;
+    color:var(--teal-dark); white-space:nowrap;
+  }
+  .piket-today-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px;
+  }
+  .piket-today-grid .chip{
+    display:flex; align-items:center; gap:10px;
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:10px 12px; font-size:13.5px; box-shadow:var(--shadow);
+  }
+  .piket-today-grid .chip .n{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:600;
+    width:22px; height:22px; border-radius:50%; background:var(--teal); color:#fff;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+
+  .week-wrap{display:flex; flex-direction:column; gap:10px;}
+  .day-block{
+    background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  }
+  .day-block.today{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold) inset;}
+  .day-block summary{
+    cursor:pointer; list-style:none; padding:13px 16px;
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fraunces', serif; font-weight:600; font-size:15.5px;
+  }
+  .day-block summary::-webkit-details-marker{display:none;}
+  .day-block summary::before{content:"▸"; color:var(--amber); font-size:13px; transition:transform .2s ease;}
+  .day-block[open] summary::before{transform:rotate(90deg);}
+  .today-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+    background:var(--gold); color:var(--teal-dark); padding:2px 8px; border-radius:999px; font-weight:600;
+  }
+  .day-count{margin-left:auto; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-soft); font-weight:500;}
+  .piket-list{list-style:none; margin:0; padding:2px 16px 14px; display:flex; flex-direction:column;}
+  .piket-list li{display:flex; align-items:center; gap:10px; padding:7px 0; border-top:1px dashed var(--line); font-size:13.5px;}
+  .piket-list li:first-child{border-top:0;}
+  .piket-list .num{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--teal); width:18px; flex-shrink:0;}
+
+  .job-wrap{display:flex; flex-direction:column;}
+  .job-item{padding:14px 0; border-top:1px dashed var(--line);}
+  .job-item:first-child{border-top:0;}
+  .job-waktu{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--amber); font-weight:600; display:block; margin-bottom:5px;
+  }
+  .job-tugas{margin:0; font-size:14px; line-height:1.6; color:var(--ink);}
+
+  /* ---------- Modal ---------- */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(18,38,43,.62);
+    backdrop-filter:blur(3px);
+    display:flex; align-items:center; justify-content:center;
+    padding:18px;
+    z-index:100;
+    opacity:0; pointer-events:none;
+    transition:opacity .22s ease;
+  }
+  .overlay.open{opacity:1; pointer-events:auto;}
+  .modal{
+    background:var(--paper);
+    border-radius:18px;
+    width:min(880px, 100%);
+    max-height:90vh;
+    display:flex; flex-direction:column;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5);
+    transform:translateY(14px) scale(.98);
+    transition:transform .22s ease;
     overflow:hidden;
   }
-  .day-card > .day-head{
-    width:100%;
-    background:var(--navy-900);
-    color:#f4efe2;
-    border:none;
-    padding:13px 16px;
-    font-size:15px;
-    font-weight:700;
-    font-family:Georgia,serif;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    cursor:pointer;
+  .overlay.open .modal{transform:translateY(0) scale(1);}
+  .modal-head{
+    padding:16px 20px;
+    display:flex; align-items:center; gap:12px;
+    border-bottom:1px solid var(--line);
+    background:var(--card);
   }
-  .day-head .arrow{transition:transform .18s;}
-  .day-card.open .day-head .arrow{transform:rotate(180deg);}
-  .day-body{max-height:0;overflow:hidden;transition:max-height .22s ease;}
-  .day-card.open .day-body{max-height:1400px;}
-  .slot-row{
-    display:flex;
-    gap:10px;
-    padding:10px 16px;
-    border-top:1px solid var(--paper-line);
+  .modal-head .badge{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; font-weight:600;
+    background:var(--teal); color:#fff;
+    padding:4px 9px; border-radius:6px; flex-shrink:0;
   }
-  .slot-row.break{background:var(--break-bg);}
-  .slot-time{
-    flex:0 0 78px;
-    font-size:11.5px;
+  .modal-head h3{
+    font-family:'Fraunces', serif; font-weight:600;
+    font-size:18px; margin:0; flex:1; min-width:0;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .icon-btn{
+    border:1px solid var(--line); background:var(--card);
+    width:32px; height:32px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:16px; color:var(--ink);
+    flex-shrink:0;
+  }
+  .icon-btn:hover{border-color:var(--amber); color:var(--amber);}
+  .modal-frame{flex:1; min-height:0; background:#0000;}
+  .modal-frame iframe{width:100%; height:100%; border:0; display:block; min-height:50vh;}
+  .modal-foot{
+    padding:12px 20px;
+    border-top:1px solid var(--line);
+    background:var(--card);
+    display:flex; justify-content:flex-end; gap:10px;
+    font-size:13px;
+  }
+  .modal-foot button{
+    all:unset;
+    box-sizing:border-box;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--teal-dark); cursor:pointer;
+    padding:8px 16px; border-radius:8px; border:1px solid var(--teal);
+    display:inline-flex; align-items:center; gap:6px;
+    transition:background .18s ease, color .18s ease;
+  }
+  .modal-foot button:hover, .modal-foot button:focus-visible{background:var(--teal); color:#fff;}
+  .modal-foot button[data-action="print"]{border-color:var(--amber); color:var(--amber);}
+  .modal-foot button[data-action="print"]:hover, .modal-foot button[data-action="print"]:focus-visible{background:var(--amber); color:#fff;}
+
+  footer{
+    text-align:center;
+    padding:22px;
+    font-size:12px;
     color:var(--ink-soft);
-    padding-top:2px;
-  }
-  .slot-main .subject{font-weight:700;font-size:14px;}
-  .slot-main .teacher{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
-  .slot-main .dual{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.5;}
-  .teacher-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;}
-
-  /* Teacher view list */
-  .tv-item{
-    display:flex;gap:12px;
-    background:#fff;border:1px solid var(--paper-line);
-    border-radius:var(--radius);
-    padding:12px 14px;margin-bottom:8px;
-    align-items:center;
-  }
-  .tv-day{flex:0 0 74px;font-weight:700;color:var(--navy-900);font-size:13px;}
-  .tv-time{flex:0 0 96px;font-size:12px;color:var(--ink-soft);}
-  .tv-main .subject{font-weight:700;font-size:14px;}
-  .tv-main .cls{font-size:12px;color:var(--ink-soft);}
-
-  .empty-state{
-    text-align:center;color:var(--ink-soft);
-    padding:40px 20px;font-size:14px;
+    font-family:'IBM Plex Mono', monospace;
+    border-top:1px solid var(--line);
   }
 
-  /* Grid vs list breakpoint */
-  .grid-only{display:block;}
-  .list-only{display:none;}
-  @media (max-width:760px){
-    .grid-only{display:none;}
-    .list-only{display:block;}
+  @media (max-width:520px){
+    .board-controls{gap:10px;}
+    .tabs button{padding:8px 14px; font-size:11.5px;}
+    .card-name{font-size:15.5px;}
   }
-
-  footer.note{
-    max-width:1100px;margin:24px auto 0;padding:0 16px;
-    font-size:11.5px;color:var(--ink-soft);
-    border-top:1px solid var(--paper-line);padding-top:12px;
-  }
-
-  @media print{
-    .controls, #legend, .btn-ghost{display:none !important;}
-    .list-only{display:none !important;}
-    .grid-only{display:block !important;}
-    body{background:#fff;}
-    header.letterhead{background:var(--navy-900) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; scroll-behavior:auto !important; animation:none !important;}
   }
 </style>
 </head>
 <body>
 
-<header class="letterhead">
-  <div class="letterhead-inner">
-    <span class="letterhead-badge">Jadwal Pembelajaran</span>
-    <h1 class="school-name">SMK Negeri 1 Maluku Tengah</h1>
-    <p class="school-sub">Jl. Pendidikan — Maluku Tengah, Provinsi Maluku</p>
-    <span class="ta-year">Tahun Pelajaran 2026 / 2027</span>
-  </div>
+<header class="top">
+  <div class="eyebrow">SMK Negeri 1 Maluku Tengah <span class="year-badge">TP 2026/2027</span></div>
+  <h1>Papan Jadwal <span>Pembelajaran</span></h1>
+  <p class="sub">Manifes jadwal per kelas dan per guru untuk Tahun Pelajaran 2026/2027. Pilih kartu untuk membuka pratinjau jadwal langsung dari Google Drive, atau gunakan tombol unduh dan cetak pada setiap kartu.</p>
 </header>
 
-<div class="controls">
-  <div class="seg">
-    <button id="tabKelas" class="active" onclick="setView('kelas')">Per Kelas</button>
-    <button id="tabGuru" onclick="setView('guru')">Per Guru</button>
-  </div>
-  <select id="selKelas" onchange="render()"></select>
-  <select id="selGuru" onchange="render()" style="display:none"></select>
-  <input type="text" id="search" placeholder="Cari mapel / guru..." oninput="render()">
-  <button class="btn-ghost" onclick="window.print()">Cetak / PDF</button>
+<div class="announce">
+  <span class="ico">🕒</span>
+  <span class="txt">
+    <span class="tag">Pengumuman</span>
+    Khusus hari <strong>Jumat</strong>, jam istirahat berlangsung pukul <strong>09.30–09.50 WIT</strong>, dimulai setelah jam pembelajaran ke-3.
+  </span>
 </div>
 
-<main>
-  <h2 class="panel-title" id="panelTitle">Kelas X Manajemen Perkantoran dan Layanan Bisnis</h2>
-  <div id="legend"></div>
-  <div id="scheduleContainer"></div>
-</main>
+<div class="board-controls">
+  <div class="tabs" id="tabs">
+    <button type="button" class="active" data-tab="kelas">Kelas</button>
+    <button type="button" data-tab="guru">Guru</button>
+    <button type="button" data-tab="piket">Piket</button>
+    <span class="thumb"></span>
+  </div>
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Cari kelas, guru, atau guru piket…" autocomplete="off">
+  </div>
+  <div class="count" id="countLabel"></div>
+</div>
 
-<footer class="note">
-  Data contoh diambil dari 1 kelas hasil export aSc Timetables yang sudah diunggah. Hubungkan sumber data
-  Google Drive lengkap (semua kelas &amp; guru) untuk melengkapi tampilan ini secara penuh.
-  Dibuat: 15 Agustus 2026.
-</footer>
+<main id="main"></main>
+
+<footer>Papan Jadwal Digital · SMK Negeri 1 Maluku Tengah · Kurikulum Merdeka</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <span class="badge" id="modalBadge">—</span>
+      <h3 id="modalTitle">Jadwal</h3>
+      <button class="icon-btn" id="closeModal" aria-label="Tutup">✕</button>
+    </div>
+    <div class="modal-frame">
+      <iframe id="modalFrame" src="" title="Pratinjau jadwal" allow="autoplay" loading="lazy"></iframe>
+    </div>
+    <div class="modal-foot">
+      <button type="button" id="modalDownload" data-action="download">⬇ Unduh</button>
+      <button type="button" id="modalPrint" data-action="print">🖨 Cetak</button>
+    </div>
+  </div>
+</div>
 
 <script>
-/* ================== DATA ================== */
-const PERIODS = [
-  {id:1,label:'1',time:'07.30–08.10'},
-  {id:2,label:'2',time:'08.10–08.50'},
-  {id:3,label:'3',time:'08.50–09.30'},
-  {id:4,label:'4',time:'09.30–10.10'},
-  {id:'ist1',label:'Istirahat',time:'10.10–10.30',brk:true},
-  {id:5,label:'5',time:'10.30–11.10'},
-  {id:6,label:'6',time:'11.10–11.50'},
-  {id:7,label:'7',time:'11.50–12.30'},
-  {id:8,label:'8',time:'12.30–13.10'},
-  {id:'ist2',label:'Istirahat',time:'13.10–13.30',brk:true},
-  {id:9,label:'9',time:'13.30–14.10'},
-  {id:10,label:'10',time:'14.10–14.50'},
-  {id:11,label:'11',time:'14.50–15.30'},
-  {id:12,label:'12',time:'15.30–16.10'}
+/* ---------------- Data ---------------- */
+const KELAS = [
+  {no:1,  tingkat:"X",   nama:"X MPLB",     id:"1ZAn_XQP_t4Z1Jkw9qJiaalQ9DhmmGTd5"},
+  {no:2,  tingkat:"X",   nama:"X AKL",      id:"1WGl4JaZnfHl_FGZgEkGFYz9Ewh6Ce6lg"},
+  {no:3,  tingkat:"X",   nama:"X PMS",      id:"1A04OCf4mfr5avifZHN-Z809ZjyGhDN6e"},
+  {no:4,  tingkat:"X",   nama:"X ULP",      id:"1pBxzZ_-jsQ7Wxt_liTzjZuqRK1aY7Cc2"},
+  {no:5,  tingkat:"X",   nama:"X TJKT 1",   id:"1hOGI8wne8t1tGBRbID8vmkzU2bpN57_w"},
+  {no:6,  tingkat:"X",   nama:"X TJKT 2",   id:"1OWlAeQiilkN_GPbQ3aJhTfURh72r3nxe"},
+  {no:7,  tingkat:"X",   nama:"X TK 1",     id:"1PA9q_3EELJjLrn1nGnSudYYNT2l1Qsij"},
+  {no:8,  tingkat:"X",   nama:"X TK 2",     id:"1zrZb9K9TK9-aZz8Mfvz1c02GgrudtEda"},
+  {no:9,  tingkat:"XI",  nama:"XI MPLB",    id:"1GqifdSS-e59otVsUrvteRAdjuE9qDRlB"},
+  {no:10, tingkat:"XI",  nama:"XI AKL",     id:"1XAPYzxRK2IRKjZ6W0xCUpku7eZ9s4ZmE"},
+  {no:11, tingkat:"XI",  nama:"XI PMS",     id:"1jb6EgptiRyU7v7NVukwfQ1lk3_0w3WtY"},
+  {no:12, tingkat:"XI",  nama:"XI ULP",     id:"1Pqm_OjuOtD-Tplwq9NN914S-bO_5Af4I"},
+  {no:13, tingkat:"XI",  nama:"XI TJKT 1",  id:"1htODykohCiGHA07GOIZFTHYu5htAF6G0"},
+  {no:14, tingkat:"XI",  nama:"XI TJKT 2",  id:"1o8j2V8LwrgKzbPYJnqWwV8H6DkNhB83N"},
+  {no:15, tingkat:"XI",  nama:"XI TK 1",    id:"1UeOh5RoMvB9uo5K3TWa5xD6xWcC4fRet"},
+  {no:16, tingkat:"XI",  nama:"XI TK 2",    id:"1HoLWIc-J-UtWbAJVhT_h6yuh9VtGcNR_"},
+  {no:17, tingkat:"XII", nama:"XII MPLB",   id:"1KiPINjngJ6L6b-SkYhcFG7FVUFKTe0Bb"},
+  {no:18, tingkat:"XII", nama:"XII AKL",    id:"1S3wSCS7S5JX4yAzlhdvXfSV5OPChMkNX"},
+  {no:19, tingkat:"XII", nama:"XII PMS",    id:"1yoy8jjFRqsDPoaPzbLZCnRWxlV3KKgpZ"},
+  {no:20, tingkat:"XII", nama:"XII ULP",    id:"1g4QTEsS7GLJe90p-2YAEIa73jymBi0xI"},
+  {no:21, tingkat:"XII", nama:"XII TJKT 1", id:"1dziGqg4Jv9Vrdls2SQcb75kSBvyWmpKz"},
+  {no:22, tingkat:"XII", nama:"XII TJKT 2", id:"188ITxq_oqI-KME35CiXk6SSZaDaVJkP9"},
+  {no:23, tingkat:"XII", nama:"XII TK",     id:"143c4g0YGNUFP_VoT35bAqzQ86yRczQYA"}
 ];
-const DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat'];
 
-// slot: {from, to, subject, teacher} OR {from, to, subject, dual:[{teacher,label}]}
-const CLASSES = {
-  "X Manajemen Perkantoran dan Layanan Bisnis": {
-    Senin:[
-      {from:1,to:4,subject:'Bahasa Inggris',teacher:'Yulan Talarima, S.Pd.,Gr'},
-      {from:5,to:6,subject:'Projek IPAS',teacher:'Lukas M. Wacanno, S.Pd'},
-      {from:7,to:9,subject:'Bahasa Indonesia',teacher:'Wa Mulina, S.Pd'},
-      {from:10,to:12,subject:'Dasar Program Keahlian MPLB',teacher:'Kalsum Mony, S.Pd'}
-    ],
-    Selasa:[
-      {from:1,to:2,subject:'Matematika',teacher:'Latumeirissa Allcresdo'},
-      {from:3,to:4,subject:'Seni Budaya (Seni Musik)',teacher:'R. A. Rirhena, S.M.Gr'},
-      {from:5,to:6,subject:'Sejarah',teacher:'V. Ruhukail, S.Pd'},
-      {from:7,to:9,subject:'Projek IPAS',teacher:'Lukas M. Wacanno, S.Pd'},
-      {from:10,to:11,subject:'Kokurikuler P5',teacher:'Tuasikal Boki'},
-      {from:12,to:12,subject:'Pendidikan Agama dan Budi Pekerti',
-        dual:[{label:'PAI',teacher:'Budiarto Sabtu, S.Pd'},{label:'PAK',teacher:'T.R. Puttuppu, S.Th'}]}
-    ],
-    Rabu:[
-      {from:1,to:3,subject:'Pendidikan Jasmani, Olah Raga dan Kesehatan',teacher:'O.A. Lawalata, S.Pd'},
-      {from:4,to:6,subject:'Dasar Program Keahlian MPLB',teacher:'Kalsum Mony, S.Pd'},
-      {from:7,to:8,subject:'Bahasa Indonesia',teacher:'Wa Mulina, S.Pd'},
-      {from:9,to:12,subject:'Pendidikan Agama dan Budi Pekerti',
-        dual:[{label:'PAI',teacher:'Budiarto Sabtu, S.Pd'},{label:'PAK',teacher:'T.R. Puttuppu, S.Th'}]}
-    ],
-    Kamis:[
-      {from:1,to:2,subject:'Matematika',teacher:'Latumeirissa Allcresdo'},
-      {from:3,to:4,subject:'Pendidikan Pancasila',teacher:'E.A. Wacanno, S.Pd'},
-      {from:5,to:6,subject:'Informatika',teacher:'Latumeirissa Allcresdo'},
-      {from:7,to:8,subject:'Muatan Lokal (Membatik)',teacher:'J. Resiloy'},
-      {from:9,to:12,subject:'Dasar Program Keahlian MPLB',teacher:'Kalsum Mony, S.Pd'}
-    ],
-    Jumat:[
-      {from:1,to:2,subject:'Dasar Program Keahlian MPLB',teacher:'Kalsum Mony, S.Pd'},
-      {from:3,to:5,subject:'Informatika',teacher:'Latumeirissa Allcresdo'}
-    ]
-  }
+const GURU = [
+  {no:1,  nama:"A. Bahy, S.Pd., M.Pd",                    id:"1re273Spnhl_Vmh9XqKEjNp10dEqAuoqC"},
+  {no:2,  nama:"E.A. Wacanno, S.Pd",                       id:"1fCEM9QMGv593Ei1U698Uls-C5BmxLkEM"},
+  {no:3,  nama:"O.A. Lawalata, S.Pd",                      id:"1Fb88MAdimwyArE8ReNiTgN2E_k6Ju9q2"},
+  {no:4,  nama:"A. Leuwol, S.Pd",                          id:"1rsx-gSXEsnCaQR-JYvJhNaH-VVBkUXUL"},
+  {no:5,  nama:"B.W. Tanamal, S.Pd",                       id:"1qsUINVr8xCGZcr-e-xY_dn2g_B6dCzUr"},
+  {no:6,  nama:"T.M.A. Kappuw, S.Pd",                      id:"1LKe5awdIsaWm72Y9vCDraOQBC8fKylR4"},
+  {no:7,  nama:"R. Lewenussa, S.Pd",                       id:"1t2U6Uw-ovY5nByQ9c85jAhT-JBMxM_c7"},
+  {no:8,  nama:"Yulan Talarima, S.Pd., Gr",                id:"1CqFb7im_oj9OeHaz6PphaHAzsax6pB5R"},
+  {no:9,  nama:"S. Singadji, S.Kom",                       id:"1Kxi0gX31Vc9WXGybSHWyIwq0T78gmRVD"},
+  {no:10, nama:"N. Ch. Elias, S.Pd., M.Pd",                id:"1etzZokxpX6zLBXA9tYG9ACLl2BYYE_kP"},
+  {no:11, nama:"A. Dj. Tuasikal, S.Pd., M.Si",             id:"1takJmWGj6BlQ-6hIpqW-H-YsyjrCDhHN"},
+  {no:12, nama:"D. Simaela, S.Pd",                         id:"1JpPT-BSgRRy37xWVhnL1IlftTplVYF2d"},
+  {no:13, nama:"R. Nilapantjuran, S.Pd",                   id:"142ypWRJTZ-5NuLvK7obTAFQUGVs1P_w7"},
+  {no:14, nama:"R. E. Ruhukail, S.Pd., M.Pd",              id:"1EOQOLd9X8B5fYW1I2NqJ4wHrnvbKRNda"},
+  {no:15, nama:"T.S. Polnaya, S.Th",                       id:"1hhSRoEsR22-9iLqBSxHkoyPoskjo61j6"},
+  {no:16, nama:"Djumiaty, S.PdI",                          id:"18WLiy3pwkVb_yuwJfUBFDGb_uWM0e0oI"},
+  {no:17, nama:"F.L. Pelletimu, S.Th",                     id:"1IYyGlzvFLCAucQTGWMR06ni5FMZEBkwF"},
+  {no:18, nama:"V. Ruhukail, S.Pd",                        id:"1FX0NLuK3h3PG4-acYeanN0TMg10FjheX"},
+  {no:19, nama:"Dahasian, S.Pd., Gr",                      id:"1rLnLLWWpW2Qwjr_dDlQK-O9junAI1UKk"},
+  {no:20, nama:"H. Salampessy, SE",                        id:"10bEM5veAL7T7KI_JAJlwUWDWQMKYC1YO"},
+  {no:21, nama:"H.S. Kapressy, S.Pd., M.Pd",               id:"1o0wSVq41xpOe5ti5laxkpEoXVbik0HHD"},
+  {no:22, nama:"M. Kunu, S.Pd",                            id:"1Ynjh2dHN_wB7i9lN12lyacCVzUGHXXC7"},
+  {no:23, nama:"Dani Iswanti, S.Sos",                      id:"1Gez2mdFdJGjEWPZyYCjsCm1tVC8Jqf9w"},
+  {no:24, nama:"A. A.W.J. Soplantila, S.Tr.Par",           id:"1tq4JaOBR1eVVCyLHhB9DuGAZhdNOeUxs"},
+  {no:25, nama:"Daud Ali Pakan, S.Pd",                     id:"1t8eTRCRnVq4RSesMTBWvL-JJZXvuoB5z"},
+  {no:26, nama:"Marwana Nurdin, SST",                      id:"12wffpX3ldy7Zb5xI2LkKsUx6UiL7SXFM"},
+  {no:27, nama:"Kalsum Mony, S.Pd",                        id:"1vddVaqmg2n3TwKaR9dldy94SkaDOiqD6"},
+  {no:28, nama:"Abdul Manan Payapo, S.T",                  id:"1Bb5kqY3o9F22Zq6Qc9M_NFSo4EN7nOyA"},
+  {no:29, nama:"R. A. Ririhena, SM.Gr",                    id:"1fNFy5tqhogUl89qgkIavGIUE6x8mYIdz"},
+  {no:30, nama:"Latumeirissa Allcresdo",                   id:"1_HgLT4CD4l7HL-RPzABI1l7hpTx87qE8"},
+  {no:31, nama:"M. Siwabessy, S.Tr.Par",                   id:"1YEqszZvjODimXHgNyokKSZLJeQEoq9eU"},
+  {no:32, nama:"E. Tamaela, A.Md",                         id:"1SElKRZH-bhyhGN6KuqFItXGVxVOb5eO4"},
+  {no:33, nama:"Wa Mulina, S.Pd",                          id:"1Xwwly3QCNHiHewvCJEeOvQG0y2TBpN2s"},
+  {no:34, nama:"Tuasikal Boki",                            id:"1L3ln_rnetTJ0Mq8fBFcKSYgnGCDqFWo3"},
+  {no:35, nama:"Papuangan Syamsudin, A.Md",                id:"1iQdaujCVaoU8a2r-HvUC6YKM6hTFmKD6"},
+  {no:36, nama:"Diwanti Wally, A.Md",                      id:"1qyi9m27qDVEofZpuAHatmYZEeIpshqF1"},
+  {no:37, nama:"J. Resiloy",                               id:"1xzFcw2siUpXlWG8V2U6PScr45xIVIY8A"},
+  {no:38, nama:"Lukas M. Wacanno, S.Pd",                   id:"1I_ujDqb7-Zwk3QU-uwkUbCBSNVoUp49k"},
+  {no:39, nama:"Mani Jamaludin, S.Kom",                    id:"1-6VJ70E-XGppAymogOnI4Klyv-4bCCVq"},
+  {no:40, nama:"Gloria Stevana Pattiradjawane, S.Tr.TI",   id:"1PcUKOitwkm6A68DDNYnJtaZRO8KZbJsD"},
+  {no:43, nama:"Netri Wailaruno, S.Pd",                    id:"1zkW6REQ3Gfmz3trab0-mb8B9ua8wAiI2"},
+  {no:44, nama:"Axl Denis Hallatu, S.Kom",                 id:"11KVJhgqPQXuZaNNUl3E9VgmNiRlkU_Tn"},
+  {no:45, nama:"R.Y. Ririhena, S.PdKom",                   id:"1Oy0L62lAJI1ORwPB6dqE4x_GXmjaXT51"},
+  {no:46, nama:"Suharja Duhalim, S.Pd",                    id:"1LQgXd2c54ZRUrw9G1B6VEzQ3HIlwA3nI"},
+  {no:47, nama:"Efrem More Meto, S.Fil",                   id:"1-vWHOdpQ8Yuz1R8PRcE3qa93Jrx95mpR"},
+  {no:48, nama:"Budiarto Tahidi, S.Pd",                    id:"1AKC5sQhV8td54RnTsUbVDZjlDHUc-WCp"},
+  {no:49, nama:"Vineske Ratmala, S.AP",                    id:"10CcVbG94qK0u7JDtLc4d7Wpu4U4AZrqg"},
+  {no:50, nama:"Tim Guru TJKT",                            id:"1CjoUDqXmB4jNYIYJUD-AQdZ1345xC3PX"}
+];
+
+const PIKET = {
+  "Senin":  ["Hans Sinodalis Kapressy, S.Pd., M.Pd", "Riana Eklesiana Ruhukail, S.Pd., M.Pd", "Batseba W. Tanamal, S.Pd", "Dani Iswanti, S.Sos", "Wa Mulina Baharudin, S.Pd", "Allchresdo Latumaerissa, S.Pd"],
+  "Selasa": ["Nesly Christianty Elias, S.Pd., M.Pd", "Rauda Lewenussa, S.Pd", "Tresye Silvona Polnaya, S.Th", "Valentina Ruhukail, S.Pd", "Boki Tuasikal", "Abraham A.W.J. Soplantila, S.Tr.Par"],
+  "Rabu":   ["Semby Singadji, S.Kom", "Kalsum Mony, S.Pd", "Dahasian, S.Pd", "Regretsiana Yolendra Ririhena, S.Pd., Kom", "Mariane Kunu, S.Pd", "Marwana Nurdin, SST"],
+  "Kamis":  ["Tresye Matelda A. Kappuw, S.Pd", "Dorce M. Simaela, S.Pd", "Renolda Florra Nilapantjuran, S.Pd", "Frederika L. Pelletimu, S.Th", "Abdul Manan Payapo, S.T", "Halimah Salampessy, SE"],
+  "Jumat":  ["Yulan Talarima, S.Pd., Gr", "Meyvke Siwabessy, S.Tr.Par", "Ray Anthon Ririhena, S.M.Gr", "Djumiati, S.PdI", "Daud Ali Pakan, S.Pd"]
 };
+const PIKET_DAYS = ["Senin","Selasa","Rabu","Kamis","Jumat"];
 
-/* ================== COLOR ASSIGNMENT ================== */
-const PALETTE = ['#d7e8dc','#f4dfc8','#dbe4f0','#f0d9df','#e6ddf0','#f5e6b8','#d3e9e6',
-                  '#f0e0d0','#dce8f5','#e8dcd0','#f2d9e8','#d9e0ea','#eee0c9','#dbeee0'];
-function hashStr(s){let h=0;for(let i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))>>>0;}return h;}
-const teacherColorCache = {};
-function colorFor(name){
-  if(!teacherColorCache[name]) teacherColorCache[name] = PALETTE[hashStr(name)%PALETTE.length];
-  return teacherColorCache[name];
-}
+const JOBDESC = [
+  {waktu:"Sebelum bel masuk (± 15 menit)", tugas:"Hadir lebih awal di sekolah, mengisi buku/jurnal piket, menyiapkan daftar hadir guru dan siswa, serta mengecek kesiapan ruang kelas dan lingkungan sekolah."},
+  {waktu:"Saat siswa datang", tugas:"Menyambut siswa di gerbang/halaman sekolah, membudayakan 3S (Senyum, Sapa, Salam), serta mengecek kerapian dan kelengkapan seragam siswa."},
+  {waktu:"Selama KBM berlangsung", tugas:"Mengontrol pelaksanaan proses belajar mengajar (PBM) di setiap kelas, mendata guru yang berhalangan/terlambat hadir, dan menugaskan atau mengisi kelas kosong dengan tugas dari guru mata pelajaran yang bersangkutan."},
+  {waktu:"Jam istirahat", tugas:"Mengawasi ketertiban siswa di kantin, halaman, dan lingkungan sekolah, serta menegur dan membina siswa yang melanggar tata tertib sekolah."},
+  {waktu:"Sepanjang hari piket", tugas:"Menindaklanjuti keterlambatan siswa (mencatat dan memberikan sanksi mendidik sesuai tata tertib sekolah); menangani siswa sakit, izin, atau bermasalah dan menghubungi orang tua/wali bila diperlukan; serta mengontrol pelaksanaan 7K (Keamanan, Ketertiban, Kebersihan, Keindahan, Kekeluargaan, Kerindangan, dan Kesehatan)."},
+  {waktu:"Menerima tamu/keperluan dinas", tugas:"Menerima dan melayani tamu sekolah, orang tua/wali siswa, atau pihak lain sesuai keperluan, serta mengarahkan ke Kepala Sekolah/Wakil Kepala Sekolah terkait apabila diperlukan."},
+  {waktu:"Akhir jam pelajaran/pulang sekolah", tugas:"Memastikan seluruh siswa pulang dengan tertib dan aman, mengecek keadaan ruang kelas dan fasilitas sekolah, mencatat kejadian penting pada buku piket, serta melaporkan hasil pelaksanaan tugas piket kepada Kepala Sekolah atau Wakil Kepala Sekolah Bidang Kesiswaan."}
+];
 
-/* ================== BUILD TEACHER LIST ================== */
-function allTeachers(){
-  const set = new Set();
-  Object.values(CLASSES).forEach(days=>{
-    Object.values(days).forEach(slots=>{
-      slots.forEach(s=>{
-        if(s.teacher) set.add(s.teacher);
-        if(s.dual) s.dual.forEach(d=>set.add(d.teacher));
-      });
-    });
-  });
-  return Array.from(set).sort();
-}
+/* ---------------- State & rendering ---------------- */
+let activeTab = "kelas";
+const $main = document.getElementById("main");
+const $count = document.getElementById("countLabel");
+const $search = document.getElementById("searchInput");
+const $tabs = document.getElementById("tabs");
 
-/* ================== STATE ================== */
-let currentView = 'kelas';
-function setView(v){
-  currentView = v;
-  document.getElementById('tabKelas').classList.toggle('active', v==='kelas');
-  document.getElementById('tabGuru').classList.toggle('active', v==='guru');
-  document.getElementById('selKelas').style.display = v==='kelas' ? '' : 'none';
-  document.getElementById('selGuru').style.display = v==='guru' ? '' : 'none';
-  render();
-}
+function drivePreviewUrl(id){ return `https://drive.google.com/file/d/${id}/preview`; }
+function driveDownloadUrl(id){ return `https://drive.google.com/uc?export=download&id=${id}`; }
 
-function initSelectors(){
-  const selKelas = document.getElementById('selKelas');
-  Object.keys(CLASSES).forEach(c=>{
-    const o=document.createElement('option'); o.value=c; o.textContent=c; selKelas.appendChild(o);
-  });
-  const selGuru = document.getElementById('selGuru');
-  allTeachers().forEach(t=>{
-    const o=document.createElement('option'); o.value=t; o.textContent=t; selGuru.appendChild(o);
-  });
-}
-
-function periodLookup(id){return PERIODS.find(p=>p.id===id);}
-
-/* ================== RENDER: LEGEND ================== */
-function renderLegend(names){
-  const legend = document.getElementById('legend');
-  legend.innerHTML = names.map(n=>
-    `<span class="chip"><span class="swatch" style="background:${colorFor(n)}"></span>${n}</span>`
-  ).join('');
-}
-
-/* ================== RENDER: KELAS - GRID ================== */
-function renderClassGrid(className, query){
-  const data = CLASSES[className];
-  let html = '<div class="grid-wrap"><table class="grid"><thead><tr><th>Hari</th>';
-  PERIODS.forEach(p=>{
-    html += `<th>${p.label}<span class="ptime">${p.time}</span></th>`;
-  });
-  html += '</tr></thead><tbody>';
-
-  DAYS.forEach(day=>{
-    html += `<tr><td class="daycell">${day}</td>`;
-    const slots = data[day] || [];
-    let col = 0;
-    while(col < PERIODS.length){
-      const p = PERIODS[col];
-      if(p.brk){ html += `<td class="break">Istirahat</td>`; col++; continue; }
-      const slot = slots.find(s=>s.from<=p.id && p.id<=s.to);
-      if(!slot){ html += `<td></td>`; col++; continue; }
-      const span = slot.to - slot.from + 1;
-      const matched = query && (slot.subject.toLowerCase().includes(query) ||
-        (slot.teacher && slot.teacher.toLowerCase().includes(query)) ||
-        (slot.dual && slot.dual.some(d=>d.teacher.toLowerCase().includes(query))));
-      const cls = 'slot' + (query && !matched ? ' dim' : '') + (matched ? ' hit' : '');
-      let bg = '#fff';
-      let body = '';
-      if(slot.dual){
-        bg = 'linear-gradient(90deg,'+colorFor(slot.dual[0].teacher)+' 50%,'+colorFor(slot.dual[1].teacher)+' 50%)';
-        body = `<span class="subject">${slot.subject}</span>` +
-          slot.dual.map(d=>`<span class="teacher">${d.label}: ${d.teacher}</span>`).join('');
-      } else {
-        bg = colorFor(slot.teacher);
-        body = `<span class="subject">${slot.subject}</span><span class="teacher">${slot.teacher}</span>`;
-      }
-      html += `<td class="${cls}" colspan="${span}" style="background:${bg}">${body}</td>`;
-      col += span;
-    }
-    html += '</tr>';
-  });
-  html += '</tbody></table></div>';
-  return html;
-}
-
-/* ================== RENDER: KELAS - MOBILE LIST ================== */
-function renderClassList(className, query){
-  const data = CLASSES[className];
-  let html = '';
-  DAYS.forEach((day, idx)=>{
-    const slots = data[day] || [];
-    html += `<div class="day-card ${idx===0?'open':''}">
-      <button class="day-head" onclick="this.parentElement.classList.toggle('open')">
-        ${day} <span class="arrow">▾</span>
-      </button>
-      <div class="day-body">`;
-    PERIODS.forEach(p=>{
-      if(p.brk){
-        html += `<div class="slot-row break"><div class="slot-time">${p.time}</div>
-          <div class="slot-main"><span class="subject">Istirahat</span></div></div>`;
-        return;
-      }
-      const slot = slots.find(s=>s.from===p.id);
-      if(!slot){
-        const covered = slots.find(s=>s.from<p.id && p.id<=s.to);
-        if(covered) return;
-        html += `<div class="slot-row"><div class="slot-time">${p.time}</div>
-          <div class="slot-main"><span class="teacher">—</span></div></div>`;
-        return;
-      }
-      const pTo = periodLookup(slot.to);
-      const timeRange = p.time.split('–')[0] + '–' + (pTo ? pTo.time.split('–')[1] : p.time.split('–')[1]);
-      const matched = query && (slot.subject.toLowerCase().includes(query) ||
-        (slot.teacher && slot.teacher.toLowerCase().includes(query)) ||
-        (slot.dual && slot.dual.some(d=>d.teacher.toLowerCase().includes(query))));
-      let main = '';
-      if(slot.dual){
-        main = `<span class="subject">${slot.subject}</span>` +
-          slot.dual.map(d=>`<span class="dual"><span class="teacher-dot" style="background:${colorFor(d.teacher)}"></span>${d.label}: ${d.teacher}</span>`).join('');
-      } else {
-        main = `<span class="subject">${slot.subject}</span>
-          <span class="teacher"><span class="teacher-dot" style="background:${colorFor(slot.teacher)}"></span>${slot.teacher}</span>`;
-      }
-      html += `<div class="slot-row" style="${matched?'background:#fbf3df':''}">
-        <div class="slot-time">${timeRange}</div>
-        <div class="slot-main">${main}</div>
-      </div>`;
-    });
-    html += `</div></div>`;
-  });
-  return html;
-}
-
-/* ================== RENDER: GURU VIEW ================== */
-function buildTeacherEntries(teacher){
-  const entries = [];
-  Object.entries(CLASSES).forEach(([className, days])=>{
-    Object.entries(days).forEach(([day, slots])=>{
-      slots.forEach(slot=>{
-        let label = null;
-        if(slot.teacher === teacher) label = null;
-        else if(slot.dual){
-          const hit = slot.dual.find(d=>d.teacher===teacher);
-          if(hit) label = hit.label;
-          else return;
-        } else return;
-        const pFrom = periodLookup(slot.from), pTo = periodLookup(slot.to);
-        entries.push({
-          day, className, subject: slot.subject, label,
-          time: pFrom.time.split('–')[0] + '–' + pTo.time.split('–')[1],
-          order: DAYS.indexOf(day)*100 + slot.from
-        });
-      });
-    });
-  });
-  entries.sort((a,b)=>a.order-b.order);
-  return entries;
-}
-
-function renderTeacherView(teacher, query){
-  const entries = buildTeacherEntries(teacher);
-  if(entries.length===0){
-    return '<div class="empty-state">Belum ada data jam mengajar untuk guru ini pada data contoh yang tersedia.</div>';
-  }
-  let html = '';
-  entries.forEach(e=>{
-    const matched = query && e.subject.toLowerCase().includes(query);
-    html += `<div class="tv-item" style="${matched?'outline:2px solid var(--gold-500)':''}">
-      <div class="tv-day">${e.day}</div>
-      <div class="tv-time">${e.time}</div>
-      <div class="tv-main">
-        <span class="subject">${e.subject}${e.label?' ('+e.label+')':''}</span>
-        <div class="cls">${e.className}</div>
+function cardHTML(no, nama, id){
+  const namaAttr = nama.replace(/"/g,'&quot;');
+  return `<div class="card">
+      <span class="stub">${String(no).padStart(2,'0')}</span>
+      <div class="card-main">
+        <button type="button" class="card-open" data-id="${id}" data-nama="${namaAttr}">
+          <span class="card-name">${nama}</span>
+          <span class="card-cta">Lihat jadwal</span>
+        </button>
+        <div class="card-actions">
+          <button type="button" class="action-btn" data-action="download" data-id="${id}" data-nama="${namaAttr}">⬇ Unduh</button>
+          <button type="button" class="action-btn" data-action="print" data-id="${id}" data-nama="${namaAttr}">🖨 Cetak</button>
+        </div>
       </div>
     </div>`;
+}
+
+function downloadFile(id){
+  const a = document.createElement("a");
+  a.href = driveDownloadUrl(id);
+  a.target = "_blank";
+  a.rel = "noopener";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+function printFile(id){
+  const w = window.open("", "_blank", "width=900,height=1000");
+  if(!w) return;
+  w.document.write(`<!DOCTYPE html><html><head><title>Cetak Jadwal</title>
+    <style>html,body{margin:0;height:100%;background:#12262B;}iframe{border:0;width:100%;height:100%;display:block;}</style>
+    </head><body><iframe src="${drivePreviewUrl(id)}"></iframe></body></html>`);
+  w.document.close();
+  const iframe = w.document.querySelector("iframe");
+  iframe.addEventListener("load", ()=>{
+    setTimeout(()=>{ try{ w.focus(); w.print(); }catch(e){} }, 500);
   });
-  return html;
 }
 
-/* ================== MASTER RENDER ================== */
-function render(){
-  const query = document.getElementById('search').value.trim().toLowerCase();
-  const container = document.getElementById('scheduleContainer');
-  const title = document.getElementById('panelTitle');
+function namaHariIni(){
+  return ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][new Date().getDay()];
+}
 
-  if(currentView === 'kelas'){
-    const className = document.getElementById('selKelas').value || Object.keys(CLASSES)[0];
-    title.textContent = 'Kelas ' + className;
-    const names = new Set();
-    Object.values(CLASSES[className]).forEach(slots=>slots.forEach(s=>{
-      if(s.teacher) names.add(s.teacher);
-      if(s.dual) s.dual.forEach(d=>names.add(d.teacher));
-    }));
-    renderLegend(Array.from(names).sort());
-    container.innerHTML =
-      `<div class="grid-only">${renderClassGrid(className, query)}</div>
-       <div class="list-only">${renderClassList(className, query)}</div>`;
+function renderGrid(){
+  const q = $search.value.trim().toLowerCase();
+
+  if(activeTab === "kelas"){
+    const tiers = ["X","XI","XII"];
+    let html = "";
+    let visibleCount = 0;
+    tiers.forEach(t=>{
+      const items = KELAS.filter(k => k.tingkat === t && k.nama.toLowerCase().includes(q));
+      if(items.length === 0) return;
+      visibleCount += items.length;
+      html += `<section class="tier"><h2>Tingkat ${t} · ${items.length} kelas</h2><div class="grid">`;
+      html += items.map(k => cardHTML(k.no, k.nama, k.id)).join("");
+      html += `</div></section>`;
+    });
+    $main.innerHTML = html || `<div class="grid"><div class="empty">Tidak ada kelas yang cocok dengan pencarian.</div></div>`;
+    $count.textContent = `${visibleCount} kelas ditemukan`;
   } else {
-    const teacher = document.getElementById('selGuru').value || allTeachers()[0];
-    title.textContent = 'Guru: ' + teacher;
-    renderLegend([teacher]);
-    container.innerHTML = `<div>${renderTeacherView(teacher, query)}</div>`;
+    const items = GURU.filter(g => g.nama.toLowerCase().includes(q));
+    $main.innerHTML = `<section class="tier"><div class="grid">${
+      items.length ? items.map(g => cardHTML(g.no, g.nama, g.id)).join("") : `<div class="empty">Tidak ada guru yang cocok dengan pencarian.</div>`
+    }</div></section>`;
+    $count.textContent = `${items.length} guru ditemukan`;
   }
+
+  $main.querySelectorAll(".card-open").forEach(btn=>{
+    btn.addEventListener("click", ()=> openModal(btn.dataset.id, btn.dataset.nama));
+  });
+  $main.querySelectorAll(".action-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      if(btn.dataset.action === "download") downloadFile(btn.dataset.id);
+      else printFile(btn.dataset.id);
+    });
+  });
 }
 
-/* ================== INIT ================== */
-initSelectors();
+function renderPiket(){
+  const q = $search.value.trim().toLowerCase();
+  const today = namaHariIni();
+  const isHariSekolah = PIKET_DAYS.includes(today);
+
+  const liveList = isHariSekolah ? PIKET[today].filter(n => n.toLowerCase().includes(q)) : [];
+  const liveHTML = `
+    <div class="piket-live ${isHariSekolah ? '' : 'off'}">
+      <span class="live-dot"></span>
+      <div class="live-text">
+        <span class="live-tag">${isHariSekolah ? 'Piket Hari Ini · ' + today : 'Tidak Ada Piket · Akhir Pekan'}</span>
+        <span class="live-sub">${isHariSekolah ? liveList.length + ' guru bertugas hari ini' : 'Jadwal piket berikutnya dimulai hari Senin'}</span>
+      </div>
+      <span class="live-clock" id="liveClock"></span>
+    </div>
+    ${isHariSekolah ? `<div class="piket-today-grid">${
+      liveList.length ? liveList.map((n,i)=>`<div class="chip"><span class="n">${i+1}</span><span>${n}</span></div>`).join("")
+        : `<div class="empty" style="grid-column:1/-1;">Tidak ada nama yang cocok dengan pencarian.</div>`
+    }</div>` : ``}
+  `;
+
+  const weekHTML = PIKET_DAYS.map(day=>{
+    const isToday = day === today;
+    const items = PIKET[day].filter(n => n.toLowerCase().includes(q));
+    if(items.length === 0) return "";
+    return `<details class="day-block ${isToday ? 'today' : ''}" ${isToday ? 'open' : ''}>
+        <summary>${day} ${isToday ? '<span class="today-tag">Hari ini</span>' : ''}<span class="day-count">${items.length} guru</span></summary>
+        <ol class="piket-list">${items.map((n,i)=>`<li><span class="num">${i+1}</span><span>${n}</span></li>`).join("")}</ol>
+      </details>`;
+  }).join("");
+
+  const jobHTML = JOBDESC.map(j=>`<div class="job-item"><span class="job-waktu">${j.waktu}</span><p class="job-tugas">${j.tugas}</p></div>`).join("");
+
+  $main.innerHTML = `
+    <section class="tier"><h2>Piket Hari Ini</h2>${liveHTML}</section>
+    <section class="tier"><h2>Jadwal Piket Mingguan · TP 2026/2027</h2><div class="week-wrap">${weekHTML || `<div class="empty">Tidak ada nama yang cocok dengan pencarian.</div>`}</div></section>
+    <section class="tier"><h2>Uraian Tugas (Job Deskripsi) Guru Piket</h2><div class="job-wrap">${jobHTML}</div></section>
+  `;
+  $count.textContent = `Hari ini: ${today}`;
+  updateClock();
+}
+
+function render(){
+  if(activeTab === "piket") renderPiket();
+  else renderGrid();
+}
+
+function updateClock(){
+  const el = document.getElementById("liveClock");
+  if(!el) return;
+  const now = new Date();
+  el.textContent = now.toLocaleTimeString("id-ID", {hour:"2-digit", minute:"2-digit", second:"2-digit"});
+}
+setInterval(()=>{
+  updateClock();
+}, 1000);
+setInterval(()=>{ if(activeTab === "piket") renderPiket(); }, 60000);
+
+/* ---------------- Tabs ---------------- */
+const TAB_ORDER = ["kelas","guru","piket"];
+$tabs.querySelectorAll("button[data-tab]").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    $tabs.querySelectorAll("button[data-tab]").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    activeTab = btn.dataset.tab;
+    $tabs.style.setProperty("--i", TAB_ORDER.indexOf(activeTab));
+    $search.value = "";
+    $search.placeholder = activeTab === "piket" ? "Cari nama guru piket…" : "Cari kelas atau nama guru…";
+    render();
+  });
+});
+
+$search.addEventListener("input", render);
+
+/* ---------------- Modal ---------------- */
+const $overlay = document.getElementById("overlay");
+const $frame = document.getElementById("modalFrame");
+const $title = document.getElementById("modalTitle");
+const $badge = document.getElementById("modalBadge");
+const $modalDownload = document.getElementById("modalDownload");
+const $modalPrint = document.getElementById("modalPrint");
+let currentId = null;
+
+function openModal(id, nama){
+  currentId = id;
+  $title.textContent = nama;
+  $badge.textContent = activeTab === "kelas" ? "KLS" : "GRU";
+  $frame.src = drivePreviewUrl(id);
+  $overlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeModal(){
+  $overlay.classList.remove("open");
+  $frame.src = "";
+  document.body.style.overflow = "";
+}
+document.getElementById("closeModal").addEventListener("click", closeModal);
+$overlay.addEventListener("click", e=>{ if(e.target === $overlay) closeModal(); });
+document.addEventListener("keydown", e=>{ if(e.key === "Escape") closeModal(); });
+$modalDownload.addEventListener("click", ()=>{ if(currentId) downloadFile(currentId); });
+$modalPrint.addEventListener("click", ()=>{ if(currentId) printFile(currentId); });
+
+/* ---------------- Init ---------------- */
 render();
 </script>
 </body>
