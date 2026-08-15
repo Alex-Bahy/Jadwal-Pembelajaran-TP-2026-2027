@@ -1,403 +1,594 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dashboard Jadwal · SMK Negeri 1 Maluku Tengah</title>
-<meta name="description" content="Pusat informasi seluruh dokumen jadwal SMK Negeri 1 Maluku Tengah, Tahun Pelajaran 2026/2027." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal Pembelajaran — SMK Negeri 1 Maluku Tengah</title>
+<style>
+  :root{
+    --navy-900:#0f2942;
+    --navy-800:#163350;
+    --navy-700:#1c3f5f;
+    --gold-500:#c89b3c;
+    --gold-300:#e0c377;
+    --paper:#f7f5ef;
+    --paper-line:#e2ddd0;
+    --ink:#1c1c1a;
+    --ink-soft:#57544c;
+    --break-bg:#efe6cf;
+    --card-bg:#ffffff;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
 
-<!-- PWA / cross-device metadata -->
-<link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#1E3A8A" />
-<meta name="color-scheme" content="light dark" />
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png" />
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="Jadwal SMKN 1 Malteng" />
-<meta name="mobile-web-app-capable" content="yes" />
+  /* ---------- Letterhead ---------- */
+  header.letterhead{
+    background:linear-gradient(135deg,var(--navy-900),var(--navy-800) 60%,var(--navy-700));
+    color:#f4efe2;
+    padding:28px 20px 24px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:4px solid var(--gold-500);
+  }
+  header.letterhead::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    opacity:.12;
+    background-image:
+      repeating-linear-gradient(45deg, var(--gold-300) 0 2px, transparent 2px 22px),
+      repeating-linear-gradient(-45deg, var(--gold-300) 0 2px, transparent 2px 22px);
+    pointer-events:none;
+  }
+  .letterhead-inner{position:relative;max-width:1100px;margin:0 auto;text-align:center;}
+  .letterhead-badge{
+    display:inline-block;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    border:1px solid var(--gold-300);
+    color:var(--gold-300);
+    padding:4px 12px;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
+  h1.school-name{
+    font-family:Georgia,"Times New Roman",serif;
+    font-weight:700;
+    font-size:clamp(20px,4.2vw,32px);
+    margin:0 0 4px;
+    letter-spacing:.01em;
+  }
+  .school-sub{
+    font-size:clamp(13px,2.6vw,16px);
+    color:#d8cfae;
+    margin:0;
+  }
+  .ta-year{
+    display:inline-block;
+    margin-top:12px;
+    font-family:Georgia,serif;
+    font-size:13px;
+    letter-spacing:.05em;
+    color:var(--navy-900);
+    background:var(--gold-300);
+    padding:3px 14px;
+    border-radius:999px;
+    font-weight:700;
+  }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css" />
+  /* ---------- Controls ---------- */
+  .controls{
+    max-width:1100px;
+    margin:18px auto 0;
+    padding:0 16px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+  }
+  .seg{
+    display:flex;
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-radius:999px;
+    padding:3px;
+    box-shadow:0 1px 2px rgba(15,41,66,.06);
+  }
+  .seg button{
+    border:none;
+    background:transparent;
+    padding:8px 16px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink-soft);
+    border-radius:999px;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .seg button.active{
+    background:var(--navy-900);
+    color:#fff;
+  }
+  select, input[type="text"]{
+    border:1px solid var(--paper-line);
+    background:#fff;
+    border-radius:8px;
+    padding:9px 12px;
+    font-size:14px;
+    color:var(--ink);
+    min-width:150px;
+    flex:1 1 150px;
+  }
+  input[type="text"]{flex:1 1 180px;}
+  .btn-ghost{
+    border:1px solid var(--navy-700);
+    background:#fff;
+    color:var(--navy-800);
+    border-radius:8px;
+    padding:9px 14px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .btn-ghost:hover{background:var(--navy-900);color:#fff;}
+
+  main{max-width:1100px;margin:18px auto;padding:0 16px;}
+
+  .panel-title{
+    font-family:Georgia,serif;
+    font-size:19px;
+    margin:6px 0 12px;
+    color:var(--navy-900);
+  }
+
+  /* ---------- Legend ---------- */
+  #legend{
+    display:flex;flex-wrap:wrap;gap:8px 14px;
+    margin:10px 0 18px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  #legend .chip{display:flex;align-items:center;gap:6px;}
+  #legend .swatch{width:11px;height:11px;border-radius:3px;display:inline-block;}
+
+  /* ---------- Grid table (tablet/desktop) ---------- */
+  .grid-wrap{overflow-x:auto;border:1px solid var(--paper-line);border-radius:var(--radius);background:#fff;}
+  table.grid{border-collapse:collapse;width:100%;min-width:900px;font-size:12.5px;}
+  table.grid th, table.grid td{
+    border:1px solid var(--paper-line);
+    padding:6px 5px;
+    text-align:center;
+    vertical-align:middle;
+  }
+  table.grid thead th{
+    background:var(--navy-900);
+    color:#f4efe2;
+    font-weight:600;
+    font-size:11.5px;
+  }
+  table.grid thead th .ptime{display:block;font-weight:400;font-size:10px;color:#c9d3dd;}
+  table.grid td.daycell{
+    background:var(--navy-800);
+    color:#fff;
+    font-weight:700;
+    writing-mode:horizontal-tb;
+    min-width:64px;
+  }
+  table.grid td.break{background:var(--break-bg);color:var(--ink-soft);font-size:10.5px;writing-mode:vertical-rl;text-orientation:mixed;}
+  table.grid td.slot .subject{display:block;font-weight:700;font-size:12px;margin-bottom:2px;}
+  table.grid td.slot .teacher{display:block;font-size:10.5px;color:var(--ink-soft);}
+  table.grid td.slot{min-width:80px;}
+  td.dim{opacity:.35;}
+  td.hit{outline:2px solid var(--gold-500);outline-offset:-2px;}
+
+  /* ---------- Mobile accordion ---------- */
+  .day-card{
+    background:var(--card-bg);
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    margin-bottom:10px;
+    overflow:hidden;
+  }
+  .day-card > .day-head{
+    width:100%;
+    background:var(--navy-900);
+    color:#f4efe2;
+    border:none;
+    padding:13px 16px;
+    font-size:15px;
+    font-weight:700;
+    font-family:Georgia,serif;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+  }
+  .day-head .arrow{transition:transform .18s;}
+  .day-card.open .day-head .arrow{transform:rotate(180deg);}
+  .day-body{max-height:0;overflow:hidden;transition:max-height .22s ease;}
+  .day-card.open .day-body{max-height:1400px;}
+  .slot-row{
+    display:flex;
+    gap:10px;
+    padding:10px 16px;
+    border-top:1px solid var(--paper-line);
+  }
+  .slot-row.break{background:var(--break-bg);}
+  .slot-time{
+    flex:0 0 78px;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    padding-top:2px;
+  }
+  .slot-main .subject{font-weight:700;font-size:14px;}
+  .slot-main .teacher{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .slot-main .dual{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.5;}
+  .teacher-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;}
+
+  /* Teacher view list */
+  .tv-item{
+    display:flex;gap:12px;
+    background:#fff;border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    padding:12px 14px;margin-bottom:8px;
+    align-items:center;
+  }
+  .tv-day{flex:0 0 74px;font-weight:700;color:var(--navy-900);font-size:13px;}
+  .tv-time{flex:0 0 96px;font-size:12px;color:var(--ink-soft);}
+  .tv-main .subject{font-weight:700;font-size:14px;}
+  .tv-main .cls{font-size:12px;color:var(--ink-soft);}
+
+  .empty-state{
+    text-align:center;color:var(--ink-soft);
+    padding:40px 20px;font-size:14px;
+  }
+
+  /* Grid vs list breakpoint */
+  .grid-only{display:block;}
+  .list-only{display:none;}
+  @media (max-width:760px){
+    .grid-only{display:none;}
+    .list-only{display:block;}
+  }
+
+  footer.note{
+    max-width:1100px;margin:24px auto 0;padding:0 16px;
+    font-size:11.5px;color:var(--ink-soft);
+    border-top:1px solid var(--paper-line);padding-top:12px;
+  }
+
+  @media print{
+    .controls, #legend, .btn-ghost{display:none !important;}
+    .list-only{display:none !important;}
+    .grid-only{display:block !important;}
+    body{background:#fff;}
+    header.letterhead{background:var(--navy-900) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
 </head>
 <body>
 
-<!-- ============ SKIP LINK ============ -->
-<a class="skip-link" href="#main-content">Langsung ke konten</a>
-
-<div class="app-shell">
-
-  <!-- ============ SIDEBAR ============ -->
-  <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
-    <div class="sidebar__brand">
-      <div class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 40 40" width="34" height="34">
-          <rect x="2" y="2" width="36" height="36" rx="10" fill="url(#gradMark)"/>
-          <path d="M11 21.5 L17.5 28 L29 14" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <defs>
-            <linearGradient id="gradMark" x1="0" y1="0" x2="40" y2="40">
-              <stop offset="0" stop-color="#1E3A8A"/>
-              <stop offset="1" stop-color="#38BDF8"/>
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-      <div class="brand-text">
-        <span class="brand-title">SMKN 1 Malteng</span>
-        <span class="brand-subtitle">Jadwal Pelajaran</span>
-      </div>
-    </div>
-
-    <nav class="sidebar__nav">
-      <p class="nav-heading">Menu</p>
-      <button class="nav-item is-active" data-nav="dashboard" type="button">
-        <svg viewBox="0 0 24 24" class="nav-icon"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6V11h-6v9Zm0-16v5h6V4h-6Z"/></svg>
-        Dashboard
-      </button>
-      <button class="nav-item" data-nav="all" type="button">
-        <svg viewBox="0 0 24 24" class="nav-icon"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5"/></svg>
-        Semua Jadwal
-      </button>
-      <button class="nav-item" data-nav="guru" type="button">
-        <svg viewBox="0 0 24 24" class="nav-icon"><circle cx="12" cy="8" r="3.4"/><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5"/></svg>
-        Guru
-      </button>
-      <button class="nav-item" data-nav="siswa" type="button">
-        <svg viewBox="0 0 24 24" class="nav-icon"><path d="M3 8 12 4l9 4-9 4-9-4Z"/><path d="M7 10.4V16c0 1.3 2.2 3 5 3s5-1.7 5-3v-5.6"/></svg>
-        Kelas
-      </button>
-      <button class="nav-item" data-nav="prodi" type="button">
-        <svg viewBox="0 0 24 24" class="nav-icon"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 13h4"/></svg>
-        Program Keahlian
-      </button>
-      <button class="nav-item" data-nav="kalender" type="button" disabled>
-        <svg viewBox="0 0 24 24" class="nav-icon"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-        Kalender Akademik
-        <span class="nav-badge">segera</span>
-      </button>
-      <p class="nav-heading nav-heading--spaced">Lainnya</p>
-      <button class="nav-item" data-nav="favorit" type="button">
-        <svg viewBox="0 0 24 24" class="nav-icon"><path d="M12 20.3 4.6 13c-2-2-2-5.3 0-7.3 2-2 5.2-2 7.1.1a5 5 0 0 1 7.2 6.9L12 20.3Z"/></svg>
-        Favorit
-        <span class="nav-count" id="favCount">0</span>
-      </button>
-      <button class="nav-item" data-nav="pengaturan" type="button">
-        <svg viewBox="0 0 24 24" class="nav-icon"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l2-1.5-2-3.4-2.3.9a7.5 7.5 0 0 0-2.6-1.5L14 2.5h-4l-.5 2.5a7.5 7.5 0 0 0-2.6 1.5l-2.3-.9-2 3.4 2 1.5a7.6 7.6 0 0 0 0 3l-2 1.5 2 3.4 2.3-.9c.8.7 1.7 1.2 2.6 1.5l.5 2.6h4l.5-2.6c.9-.3 1.8-.8 2.6-1.5l2.3.9 2-3.4-2-1.5Z"/></svg>
-        Pengaturan
-      </button>
-    </nav>
-
-    <div class="sidebar__footer">
-      <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
-        <svg viewBox="0 0 24 24" class="icon-sun"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19v2.5M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19 12h2.5M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
-        <svg viewBox="0 0 24 24" class="icon-moon" hidden><path d="M20 14.6A8.5 8.5 0 1 1 9.4 4a7 7 0 0 0 10.6 10.6Z"/></svg>
-        <span class="theme-toggle__label">Mode gelap</span>
-      </button>
-    </div>
-  </aside>
-
-  <div class="sidebar-scrim" id="sidebarScrim"></div>
-
-  <!-- ============ MAIN ============ -->
-  <div class="main-column">
-
-    <!-- ============ HEADER ============ -->
-    <header class="topbar" id="topbar">
-      <button class="icon-btn topbar__menu" id="menuToggle" type="button" aria-label="Buka menu navigasi" aria-controls="sidebar" aria-expanded="false">
-        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-      </button>
-
-      <div class="topbar__title-block">
-        <div class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb">
-          <span>SMKN 1 Malteng</span>
-          <span class="breadcrumb__sep">/</span>
-          <span id="breadcrumbCurrent">Dashboard</span>
-        </div>
-        <div class="topbar__heading-row">
-          <h1 class="topbar__title">Dashboard Jadwal Sekolah</h1>
-          <span class="pill pill--year">TP 2026/2027</span>
-        </div>
-        <p class="topbar__meta">Diperbarui terakhir · <time id="lastUpdate">04 Agustus 2026</time></p>
-      </div>
-
-      <div class="topbar__actions">
-        <label class="search-field" for="searchInput">
-          <svg viewBox="0 0 24 24" class="search-field__icon"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/></svg>
-          <input id="searchInput" type="search" placeholder="Cari nama jadwal, guru, atau kategori…" autocomplete="off" />
-          <kbd class="search-field__kbd">Ctrl F</kbd>
-        </label>
-        <button class="btn btn--secondary" id="shareBtn" type="button">
-          <svg viewBox="0 0 24 24" class="btn__icon"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>
-          Buka di HP
-        </button>
-        <button class="btn btn--primary" id="printActiveBtn" type="button">
-          <svg viewBox="0 0 24 24" class="btn__icon"><path d="M6 9V3h12v6M6 18h12v3H6v-3Zm-3-8h18a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-3v-3H6v3H3a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1Z"/></svg>
-          Cetak
-        </button>
-      </div>
-    </header>
-
-    <!-- ============ OFFLINE BADGE ============ -->
-    <div class="offline-badge" id="offlineBadge" hidden>
-      <svg viewBox="0 0 24 24"><path d="M2 8.5a17 17 0 0 1 20 0M5.5 12a12 12 0 0 1 13 0M9 15.5a7 7 0 0 1 6 0"/><path d="M12 19v.1M3 3l18 18"/></svg>
-      Mode luring — sebagian isi dari singgahan terakhir
-    </div>
-
-    <!-- ============ INSTALL BANNER ============ -->
-    <div class="install-banner" id="installBanner" hidden>
-      <div class="install-banner__icon">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>
-      </div>
-      <div class="install-banner__text">
-        <p class="install-banner__title">Pasang di layar utama</p>
-        <p class="install-banner__desc">Buka dashboard sekali ketuk tanpa browser, seperti aplikasi biasa.</p>
-      </div>
-      <button class="btn btn--primary btn--sm" id="installBtn" type="button">Pasang</button>
-      <button class="icon-btn" id="dismissInstallBtn" type="button" aria-label="Tutup"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
-    </div>
-
-    <main id="main-content" class="content">
-
-      <!-- ============ STATS ============ -->
-      <section class="stats-row" aria-label="Ringkasan statistik">
-        <div class="stat-card">
-          <span class="stat-card__value" id="statTotal">0</span>
-          <span class="stat-card__label">Total dokumen</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-card__value" id="statGuru">0</span>
-          <span class="stat-card__label">Jadwal guru</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-card__value" id="statSiswa">0</span>
-          <span class="stat-card__label">Jadwal kelas</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-card__value" id="statProdi">0</span>
-          <span class="stat-card__label">Program keahlian</span>
-        </div>
-      </section>
-
-      <!-- ============ TOOLBAR ============ -->
-      <section class="toolbar" aria-label="Filter dan urutkan">
-        <div class="toolbar__filters">
-          <div class="chip-group" id="categoryChips" role="tablist" aria-label="Kategori">
-            <button class="chip is-active" data-filter="semua" type="button" role="tab" aria-selected="true">Semua</button>
-            <button class="chip" data-filter="guru" type="button" role="tab" aria-selected="false">Jadwal Guru</button>
-            <button class="chip" data-filter="siswa" type="button" role="tab" aria-selected="false">Jadwal Siswa</button>
-            <button class="chip" data-filter="prodi" type="button" role="tab" aria-selected="false">Program Keahlian</button>
-          </div>
-
-          <select class="select-field" id="jenjangSelect" aria-label="Filter jenjang kelas">
-            <option value="semua">Semua Jenjang</option>
-            <option value="X">Kelas X</option>
-            <option value="XI">Kelas XI</option>
-            <option value="XII">Kelas XII</option>
-          </select>
-
-          <select class="select-field" id="sortSelect" aria-label="Urutkan">
-            <option value="az">Nama A–Z</option>
-            <option value="za">Nama Z–A</option>
-            <option value="terbaru">Terbaru</option>
-            <option value="terlama">Terlama</option>
-            <option value="kategori">Kategori</option>
-          </select>
-        </div>
-
-        <div class="toolbar__right">
-          <span class="search-counter" id="searchCounter" aria-live="polite"></span>
-          <div class="view-toggle" role="group" aria-label="Mode tampilan">
-            <button class="view-toggle__btn is-active" data-view="grid" type="button" aria-label="Tampilan kartu" aria-pressed="true">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-            </button>
-            <button class="view-toggle__btn" data-view="table" type="button" aria-label="Tampilan tabel" aria-pressed="false">
-              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 10h18M3 15h18M9 4v16"/></svg>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ LOADING STATE ============ -->
-      <section id="loadingState" class="skeleton-grid" aria-hidden="true">
-        <div class="skeleton-card"></div>
-        <div class="skeleton-card"></div>
-        <div class="skeleton-card"></div>
-        <div class="skeleton-card"></div>
-      </section>
-
-      <!-- ============ EMPTY STATE ============ -->
-      <section id="emptyState" class="empty-state" hidden>
-        <svg viewBox="0 0 120 120" class="empty-state__illustration" aria-hidden="true">
-          <circle cx="60" cy="60" r="52" fill="var(--color-bg-subtle)"/>
-          <rect x="34" y="30" width="52" height="64" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-width="2"/>
-          <path d="M42 46h36M42 58h36M42 70h20" stroke="var(--color-border-strong)" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="82" cy="82" r="16" fill="var(--color-surface)" stroke="var(--color-accent)" stroke-width="3"/>
-          <path d="m77 82 3.5 3.5L88 78" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        </svg>
-        <h2>Belum ada jadwal tersedia.</h2>
-        <p>Coba ubah kata kunci pencarian atau atur ulang filter kategori.</p>
-        <button class="btn btn--secondary" id="resetFiltersBtn" type="button">Atur ulang filter</button>
-      </section>
-
-      <!-- ============ ERROR STATE (template, hidden) ============ -->
-      <template id="errorStateTemplate">
-        <div class="error-state">
-          <svg viewBox="0 0 24 24" class="error-state__icon"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 16.5v.1"/></svg>
-          <p class="error-state__title">Dokumen tidak dapat dibuka.</p>
-          <p class="error-state__desc">Berkas mungkin belum tersedia atau koneksi terputus.</p>
-          <button class="btn btn--secondary btn--sm" data-action="retry" type="button">Coba lagi</button>
-        </div>
-      </template>
-
-      <!-- ============ GRID / TABLE ============ -->
-      <section class="card-grid" id="cardGrid" aria-label="Daftar dokumen jadwal"></section>
-
-      <div class="table-wrap" id="tableWrap" hidden>
-        <table class="data-table" id="dataTable">
-          <thead>
-            <tr>
-              <th scope="col">No</th>
-              <th scope="col">Nama</th>
-              <th scope="col">Kategori</th>
-              <th scope="col">Ukuran</th>
-              <th scope="col">Tanggal</th>
-              <th scope="col" class="col-actions">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="dataTableBody"></tbody>
-        </table>
-      </div>
-
-      <!-- ============ PAGINATION ============ -->
-      <nav class="pagination" id="pagination" aria-label="Navigasi halaman"></nav>
-
-    </main>
-
-    <footer class="page-footer">
-      <p>© 2026 SMK Negeri 1 Maluku Tengah — Masohi, Provinsi Maluku. Dashboard internal untuk keperluan administrasi jadwal.</p>
-    </footer>
+<header class="letterhead">
+  <div class="letterhead-inner">
+    <span class="letterhead-badge">Jadwal Pembelajaran</span>
+    <h1 class="school-name">SMK Negeri 1 Maluku Tengah</h1>
+    <p class="school-sub">Jl. Pendidikan — Maluku Tengah, Provinsi Maluku</p>
+    <span class="ta-year">Tahun Pelajaran 2026 / 2027</span>
   </div>
+</header>
+
+<div class="controls">
+  <div class="seg">
+    <button id="tabKelas" class="active" onclick="setView('kelas')">Per Kelas</button>
+    <button id="tabGuru" onclick="setView('guru')">Per Guru</button>
+  </div>
+  <select id="selKelas" onchange="render()"></select>
+  <select id="selGuru" onchange="render()" style="display:none"></select>
+  <input type="text" id="search" placeholder="Cari mapel / guru..." oninput="render()">
+  <button class="btn-ghost" onclick="window.print()">Cetak / PDF</button>
 </div>
 
-<!-- ============ PREVIEW MODAL ============ -->
-<div class="preview-modal" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewTitle" hidden>
-  <div class="preview-modal__backdrop" data-close-modal></div>
-  <div class="preview-modal__panel">
-    <header class="preview-modal__header">
-      <div class="preview-modal__heading">
-        <span class="preview-modal__badge" id="previewBadge">Jadwal</span>
-        <h2 id="previewTitle">Nama Dokumen</h2>
-        <p class="preview-modal__pages" id="previewPages"></p>
-      </div>
-      <div class="preview-modal__tools">
-        <button class="icon-btn" id="zoomOutBtn" type="button" aria-label="Perkecil"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M8 11h6M20 20l-3.4-3.4"/></svg></button>
-        <span class="preview-modal__zoom" id="zoomLevel">100%</span>
-        <button class="icon-btn" id="zoomInBtn" type="button" aria-label="Perbesar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M11 8v6M8 11h6M20 20l-3.4-3.4"/></svg></button>
-        <button class="icon-btn" id="rotateBtn" type="button" aria-label="Putar"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 21v-6h6"/></svg></button>
-        <button class="icon-btn" id="fullscreenBtn" type="button" aria-label="Layar penuh"><svg viewBox="0 0 24 24"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg></button>
-        <button class="icon-btn" id="closeModalBtn" type="button" aria-label="Tutup" data-close-modal><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
-      </div>
-    </header>
+<main>
+  <h2 class="panel-title" id="panelTitle">Kelas X Manajemen Perkantoran dan Layanan Bisnis</h2>
+  <div id="legend"></div>
+  <div id="scheduleContainer"></div>
+</main>
 
-    <div class="preview-modal__body" id="previewBody">
-      <div class="preview-modal__loading" id="previewLoading">
-        <span class="spinner"></span>
-        <p>Memuat dokumen…</p>
-      </div>
-      <iframe id="previewFrame" class="preview-modal__frame" title="Pratinjau dokumen PDF" hidden></iframe>
-    </div>
+<footer class="note">
+  Data contoh diambil dari 1 kelas hasil export aSc Timetables yang sudah diunggah. Hubungkan sumber data
+  Google Drive lengkap (semua kelas &amp; guru) untuk melengkapi tampilan ini secara penuh.
+  Dibuat: 15 Agustus 2026.
+</footer>
 
-    <footer class="preview-modal__footer">
-      <div class="preview-modal__nav">
-        <button class="btn btn--ghost btn--sm" id="prevPageBtn" type="button">← Sebelumnya</button>
-        <button class="btn btn--ghost btn--sm" id="nextPageBtn" type="button">Berikutnya →</button>
-      </div>
-      <div class="preview-modal__actions">
-        <button class="btn btn--secondary btn--sm" id="modalFavBtn" type="button">☆ Favorit</button>
-        <button class="btn btn--secondary btn--sm" id="modalPrintBtn" type="button">Cetak</button>
-        <a class="btn btn--primary btn--sm" id="modalDownloadBtn" href="#" download>Unduh PDF</a>
-      </div>
-    </footer>
-  </div>
-</div>
-
-<!-- ============ SHARE / MULTI-DEVICE MODAL ============ -->
-<div class="share-modal" id="shareModal" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle" hidden>
-  <div class="share-modal__backdrop" data-close-share></div>
-  <div class="share-modal__panel">
-    <header class="share-modal__header">
-      <h2 id="shareModalTitle">Buka dari gadget lain</h2>
-      <button class="icon-btn" id="closeShareBtn" type="button" aria-label="Tutup" data-close-share><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
-    </header>
-
-    <div class="share-modal__body">
-      <div class="share-modal__qr-wrap">
-        <img id="shareQrImg" class="share-modal__qr" width="180" height="180" alt="Kode QR menuju dashboard ini" />
-        <p class="share-modal__qr-caption">Pindai dengan kamera HP atau tablet untuk membuka dashboard ini langsung.</p>
-      </div>
-
-      <div class="share-modal__link-row">
-        <label for="shareUrlInput" class="share-modal__label">Tautan dashboard</label>
-        <div class="share-modal__link-field">
-          <input id="shareUrlInput" type="url" spellcheck="false" />
-          <button class="btn btn--secondary btn--sm" id="copyLinkBtn" type="button">Salin</button>
-        </div>
-        <p class="share-modal__hint" id="shareUrlHint">Otomatis memakai alamat halaman ini. Ubah jika dashboard sudah dipindahkan ke domain/GitHub Pages lain, lalu kode QR akan diperbarui.</p>
-      </div>
-
-      <div class="share-modal__actions">
-        <button class="btn btn--primary" id="nativeShareBtn" type="button">
-          <svg viewBox="0 0 24 24" class="btn__icon"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>
-          Bagikan tautan
-        </button>
-        <a class="btn btn--secondary" id="downloadQrBtn" download="qr-jadwal-smkn1-malteng.png">
-          <svg viewBox="0 0 24 24" class="btn__icon"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
-          Unduh kode QR
-        </a>
-      </div>
-
-      <div class="share-modal__install">
-        <p class="share-modal__label">Pasang sebagai aplikasi</p>
-        <div class="install-steps">
-          <div class="install-steps__item">
-            <span class="install-steps__badge">Android · Chrome</span>
-            <p>Ketuk menu ⋮ → <strong>Tambahkan ke layar Utama</strong>.</p>
-          </div>
-          <div class="install-steps__item">
-            <span class="install-steps__badge">iPhone / iPad · Safari</span>
-            <p>Ketuk ikon Bagikan <span aria-hidden="true">⬆</span> → <strong>Tambah ke Layar Utama</strong>.</p>
-          </div>
-          <div class="install-steps__item">
-            <span class="install-steps__badge">Laptop · Chrome/Edge</span>
-            <p>Klik ikon pasang di kolom alamat, atau tombol <strong>Pasang</strong> di atas.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ============ TOAST CONTAINER ============ -->
-<div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
-
-<!-- ============ BACK TO TOP ============ -->
-<button class="back-to-top" id="backToTop" type="button" aria-label="Kembali ke atas" hidden>
-  <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-</button>
-
-<!-- ============ PRINT-ONLY AREA ============ -->
-<div id="printArea" class="print-only" hidden></div>
-
-<script src="script.js"></script>
 <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("sw.js").catch(() => { /* ignore on file:// or unsupported hosts */ });
-    });
+/* ================== DATA ================== */
+const PERIODS = [
+  {id:1,label:'1',time:'07.30–08.10'},
+  {id:2,label:'2',time:'08.10–08.50'},
+  {id:3,label:'3',time:'08.50–09.30'},
+  {id:4,label:'4',time:'09.30–10.10'},
+  {id:'ist1',label:'Istirahat',time:'10.10–10.30',brk:true},
+  {id:5,label:'5',time:'10.30–11.10'},
+  {id:6,label:'6',time:'11.10–11.50'},
+  {id:7,label:'7',time:'11.50–12.30'},
+  {id:8,label:'8',time:'12.30–13.10'},
+  {id:'ist2',label:'Istirahat',time:'13.10–13.30',brk:true},
+  {id:9,label:'9',time:'13.30–14.10'},
+  {id:10,label:'10',time:'14.10–14.50'},
+  {id:11,label:'11',time:'14.50–15.30'},
+  {id:12,label:'12',time:'15.30–16.10'}
+];
+const DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+
+// slot: {from, to, subject, teacher} OR {from, to, subject, dual:[{teacher,label}]}
+const CLASSES = {
+  "X Manajemen Perkantoran dan Layanan Bisnis": {
+    Senin:[
+      {from:1,to:4,subject:'Bahasa Inggris',teacher:'Yulan Talarima, S.Pd.,Gr'},
+      {from:5,to:6,subject:'Projek IPAS',teacher:'Lukas M. Wacanno, S.Pd'},
+      {from:7,to:9,subject:'Bahasa Indonesia',teacher:'Wa Mulina, S.Pd'},
+      {from:10,to:12,subject:'Dasar Program Keahlian MPLB',teacher:'Kalsum Mony, S.Pd'}
+    ],
+    Selasa:[
+      {from:1,to:2,subject:'Matematika',teacher:'Latumeirissa Allcresdo'},
+      {from:3,to:4,subject:'Seni Budaya (Seni Musik)',teacher:'R. A. Rirhena, S.M.Gr'},
+      {from:5,to:6,subject:'Sejarah',teacher:'V. Ruhukail, S.Pd'},
+      {from:7,to:9,subject:'Projek IPAS',teacher:'Lukas M. Wacanno, S.Pd'},
+      {from:10,to:11,subject:'Kokurikuler P5',teacher:'Tuasikal Boki'},
+      {from:12,to:12,subject:'Pendidikan Agama dan Budi Pekerti',
+        dual:[{label:'PAI',teacher:'Budiarto Sabtu, S.Pd'},{label:'PAK',teacher:'T.R. Puttuppu, S.Th'}]}
+    ],
+    Rabu:[
+      {from:1,to:3,subject:'Pendidikan Jasmani, Olah Raga dan Kesehatan',teacher:'O.A. Lawalata, S.Pd'},
+      {from:4,to:6,subject:'Dasar Program Keahlian MPLB',teacher:'Kalsum Mony, S.Pd'},
+      {from:7,to:8,subject:'Bahasa Indonesia',teacher:'Wa Mulina, S.Pd'},
+      {from:9,to:12,subject:'Pendidikan Agama dan Budi Pekerti',
+        dual:[{label:'PAI',teacher:'Budiarto Sabtu, S.Pd'},{label:'PAK',teacher:'T.R. Puttuppu, S.Th'}]}
+    ],
+    Kamis:[
+      {from:1,to:2,subject:'Matematika',teacher:'Latumeirissa Allcresdo'},
+      {from:3,to:4,subject:'Pendidikan Pancasila',teacher:'E.A. Wacanno, S.Pd'},
+      {from:5,to:6,subject:'Informatika',teacher:'Latumeirissa Allcresdo'},
+      {from:7,to:8,subject:'Muatan Lokal (Membatik)',teacher:'J. Resiloy'},
+      {from:9,to:12,subject:'Dasar Program Keahlian MPLB',teacher:'Kalsum Mony, S.Pd'}
+    ],
+    Jumat:[
+      {from:1,to:2,subject:'Dasar Program Keahlian MPLB',teacher:'Kalsum Mony, S.Pd'},
+      {from:3,to:5,subject:'Informatika',teacher:'Latumeirissa Allcresdo'}
+    ]
   }
+};
+
+/* ================== COLOR ASSIGNMENT ================== */
+const PALETTE = ['#d7e8dc','#f4dfc8','#dbe4f0','#f0d9df','#e6ddf0','#f5e6b8','#d3e9e6',
+                  '#f0e0d0','#dce8f5','#e8dcd0','#f2d9e8','#d9e0ea','#eee0c9','#dbeee0'];
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))>>>0;}return h;}
+const teacherColorCache = {};
+function colorFor(name){
+  if(!teacherColorCache[name]) teacherColorCache[name] = PALETTE[hashStr(name)%PALETTE.length];
+  return teacherColorCache[name];
+}
+
+/* ================== BUILD TEACHER LIST ================== */
+function allTeachers(){
+  const set = new Set();
+  Object.values(CLASSES).forEach(days=>{
+    Object.values(days).forEach(slots=>{
+      slots.forEach(s=>{
+        if(s.teacher) set.add(s.teacher);
+        if(s.dual) s.dual.forEach(d=>set.add(d.teacher));
+      });
+    });
+  });
+  return Array.from(set).sort();
+}
+
+/* ================== STATE ================== */
+let currentView = 'kelas';
+function setView(v){
+  currentView = v;
+  document.getElementById('tabKelas').classList.toggle('active', v==='kelas');
+  document.getElementById('tabGuru').classList.toggle('active', v==='guru');
+  document.getElementById('selKelas').style.display = v==='kelas' ? '' : 'none';
+  document.getElementById('selGuru').style.display = v==='guru' ? '' : 'none';
+  render();
+}
+
+function initSelectors(){
+  const selKelas = document.getElementById('selKelas');
+  Object.keys(CLASSES).forEach(c=>{
+    const o=document.createElement('option'); o.value=c; o.textContent=c; selKelas.appendChild(o);
+  });
+  const selGuru = document.getElementById('selGuru');
+  allTeachers().forEach(t=>{
+    const o=document.createElement('option'); o.value=t; o.textContent=t; selGuru.appendChild(o);
+  });
+}
+
+function periodLookup(id){return PERIODS.find(p=>p.id===id);}
+
+/* ================== RENDER: LEGEND ================== */
+function renderLegend(names){
+  const legend = document.getElementById('legend');
+  legend.innerHTML = names.map(n=>
+    `<span class="chip"><span class="swatch" style="background:${colorFor(n)}"></span>${n}</span>`
+  ).join('');
+}
+
+/* ================== RENDER: KELAS - GRID ================== */
+function renderClassGrid(className, query){
+  const data = CLASSES[className];
+  let html = '<div class="grid-wrap"><table class="grid"><thead><tr><th>Hari</th>';
+  PERIODS.forEach(p=>{
+    html += `<th>${p.label}<span class="ptime">${p.time}</span></th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  DAYS.forEach(day=>{
+    html += `<tr><td class="daycell">${day}</td>`;
+    const slots = data[day] || [];
+    let col = 0;
+    while(col < PERIODS.length){
+      const p = PERIODS[col];
+      if(p.brk){ html += `<td class="break">Istirahat</td>`; col++; continue; }
+      const slot = slots.find(s=>s.from<=p.id && p.id<=s.to);
+      if(!slot){ html += `<td></td>`; col++; continue; }
+      const span = slot.to - slot.from + 1;
+      const matched = query && (slot.subject.toLowerCase().includes(query) ||
+        (slot.teacher && slot.teacher.toLowerCase().includes(query)) ||
+        (slot.dual && slot.dual.some(d=>d.teacher.toLowerCase().includes(query))));
+      const cls = 'slot' + (query && !matched ? ' dim' : '') + (matched ? ' hit' : '');
+      let bg = '#fff';
+      let body = '';
+      if(slot.dual){
+        bg = 'linear-gradient(90deg,'+colorFor(slot.dual[0].teacher)+' 50%,'+colorFor(slot.dual[1].teacher)+' 50%)';
+        body = `<span class="subject">${slot.subject}</span>` +
+          slot.dual.map(d=>`<span class="teacher">${d.label}: ${d.teacher}</span>`).join('');
+      } else {
+        bg = colorFor(slot.teacher);
+        body = `<span class="subject">${slot.subject}</span><span class="teacher">${slot.teacher}</span>`;
+      }
+      html += `<td class="${cls}" colspan="${span}" style="background:${bg}">${body}</td>`;
+      col += span;
+    }
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+
+/* ================== RENDER: KELAS - MOBILE LIST ================== */
+function renderClassList(className, query){
+  const data = CLASSES[className];
+  let html = '';
+  DAYS.forEach((day, idx)=>{
+    const slots = data[day] || [];
+    html += `<div class="day-card ${idx===0?'open':''}">
+      <button class="day-head" onclick="this.parentElement.classList.toggle('open')">
+        ${day} <span class="arrow">▾</span>
+      </button>
+      <div class="day-body">`;
+    PERIODS.forEach(p=>{
+      if(p.brk){
+        html += `<div class="slot-row break"><div class="slot-time">${p.time}</div>
+          <div class="slot-main"><span class="subject">Istirahat</span></div></div>`;
+        return;
+      }
+      const slot = slots.find(s=>s.from===p.id);
+      if(!slot){
+        const covered = slots.find(s=>s.from<p.id && p.id<=s.to);
+        if(covered) return;
+        html += `<div class="slot-row"><div class="slot-time">${p.time}</div>
+          <div class="slot-main"><span class="teacher">—</span></div></div>`;
+        return;
+      }
+      const pTo = periodLookup(slot.to);
+      const timeRange = p.time.split('–')[0] + '–' + (pTo ? pTo.time.split('–')[1] : p.time.split('–')[1]);
+      const matched = query && (slot.subject.toLowerCase().includes(query) ||
+        (slot.teacher && slot.teacher.toLowerCase().includes(query)) ||
+        (slot.dual && slot.dual.some(d=>d.teacher.toLowerCase().includes(query))));
+      let main = '';
+      if(slot.dual){
+        main = `<span class="subject">${slot.subject}</span>` +
+          slot.dual.map(d=>`<span class="dual"><span class="teacher-dot" style="background:${colorFor(d.teacher)}"></span>${d.label}: ${d.teacher}</span>`).join('');
+      } else {
+        main = `<span class="subject">${slot.subject}</span>
+          <span class="teacher"><span class="teacher-dot" style="background:${colorFor(slot.teacher)}"></span>${slot.teacher}</span>`;
+      }
+      html += `<div class="slot-row" style="${matched?'background:#fbf3df':''}">
+        <div class="slot-time">${timeRange}</div>
+        <div class="slot-main">${main}</div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  return html;
+}
+
+/* ================== RENDER: GURU VIEW ================== */
+function buildTeacherEntries(teacher){
+  const entries = [];
+  Object.entries(CLASSES).forEach(([className, days])=>{
+    Object.entries(days).forEach(([day, slots])=>{
+      slots.forEach(slot=>{
+        let label = null;
+        if(slot.teacher === teacher) label = null;
+        else if(slot.dual){
+          const hit = slot.dual.find(d=>d.teacher===teacher);
+          if(hit) label = hit.label;
+          else return;
+        } else return;
+        const pFrom = periodLookup(slot.from), pTo = periodLookup(slot.to);
+        entries.push({
+          day, className, subject: slot.subject, label,
+          time: pFrom.time.split('–')[0] + '–' + pTo.time.split('–')[1],
+          order: DAYS.indexOf(day)*100 + slot.from
+        });
+      });
+    });
+  });
+  entries.sort((a,b)=>a.order-b.order);
+  return entries;
+}
+
+function renderTeacherView(teacher, query){
+  const entries = buildTeacherEntries(teacher);
+  if(entries.length===0){
+    return '<div class="empty-state">Belum ada data jam mengajar untuk guru ini pada data contoh yang tersedia.</div>';
+  }
+  let html = '';
+  entries.forEach(e=>{
+    const matched = query && e.subject.toLowerCase().includes(query);
+    html += `<div class="tv-item" style="${matched?'outline:2px solid var(--gold-500)':''}">
+      <div class="tv-day">${e.day}</div>
+      <div class="tv-time">${e.time}</div>
+      <div class="tv-main">
+        <span class="subject">${e.subject}${e.label?' ('+e.label+')':''}</span>
+        <div class="cls">${e.className}</div>
+      </div>
+    </div>`;
+  });
+  return html;
+}
+
+/* ================== MASTER RENDER ================== */
+function render(){
+  const query = document.getElementById('search').value.trim().toLowerCase();
+  const container = document.getElementById('scheduleContainer');
+  const title = document.getElementById('panelTitle');
+
+  if(currentView === 'kelas'){
+    const className = document.getElementById('selKelas').value || Object.keys(CLASSES)[0];
+    title.textContent = 'Kelas ' + className;
+    const names = new Set();
+    Object.values(CLASSES[className]).forEach(slots=>slots.forEach(s=>{
+      if(s.teacher) names.add(s.teacher);
+      if(s.dual) s.dual.forEach(d=>names.add(d.teacher));
+    }));
+    renderLegend(Array.from(names).sort());
+    container.innerHTML =
+      `<div class="grid-only">${renderClassGrid(className, query)}</div>
+       <div class="list-only">${renderClassList(className, query)}</div>`;
+  } else {
+    const teacher = document.getElementById('selGuru').value || allTeachers()[0];
+    title.textContent = 'Guru: ' + teacher;
+    renderLegend([teacher]);
+    container.innerHTML = `<div>${renderTeacherView(teacher, query)}</div>`;
+  }
+}
+
+/* ================== INIT ================== */
+initSelectors();
+render();
 </script>
 </body>
 </html>
