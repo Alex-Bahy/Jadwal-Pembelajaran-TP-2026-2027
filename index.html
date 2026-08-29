@@ -116,7 +116,7 @@
     display:flex; flex-wrap:wrap; gap:14px; align-items:center;
   }
   .tabs{
-    --n:3; --i:0;
+    --n:4; --i:0;
     position:relative;
     display:inline-flex;
     background:var(--teal-dark);
@@ -430,10 +430,50 @@
     border-top:1px solid var(--line);
   }
 
+  /* ---------- Kokurikuler ---------- */
+  .koku-intro{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px 20px; box-shadow:var(--shadow); margin-bottom:16px;
+    font-size:13.5px; line-height:1.6; color:var(--ink);
+  }
+  .koku-intro b{color:var(--teal-dark);}
+  .koku-meta{
+    display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;
+  }
+  .koku-meta span{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.04em;
+    background:rgba(31,111,100,.09); color:var(--teal-dark);
+    padding:5px 10px; border-radius:999px;
+  }
+  .koku-tema-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
+    padding:2px 9px; border-radius:999px; font-weight:600; flex-shrink:0;
+  }
+  .koku-tema-tag.peduli{background:rgba(31,111,100,.14); color:var(--teal-dark);}
+  .koku-tema-tag.hemat{background:rgba(199,123,61,.16); color:var(--amber);}
+  .koku-tema-tag.gelar{background:rgba(227,178,60,.22); color:#7a5a12;}
+  .koku-list{list-style:none; margin:0; padding:2px 16px 14px; display:flex; flex-direction:column;}
+  .koku-list li{display:flex; gap:10px; padding:8px 0; border-top:1px dashed var(--line); font-size:13.5px; line-height:1.5;}
+  .koku-list li:first-child{border-top:0;}
+  .koku-list .jam{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft);
+    flex-shrink:0; width:82px; padding-top:1px;
+  }
+  .koku-dims{
+    padding:12px 16px 16px; display:flex; flex-wrap:wrap; gap:6px;
+    border-top:1px dashed var(--line);
+  }
+  .koku-dims span{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    background:rgba(75,92,95,.09); color:var(--ink-soft);
+    padding:4px 9px; border-radius:999px;
+  }
+
   @media (max-width:520px){
     .board-controls{gap:10px;}
     .tabs button{padding:8px 14px; font-size:11.5px;}
     .card-name{font-size:15.5px;}
+    .koku-list .jam{width:64px;}
   }
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important; scroll-behavior:auto !important; animation:none !important;}
@@ -461,10 +501,11 @@
     <button type="button" class="active" data-tab="kelas">Kelas</button>
     <button type="button" data-tab="guru">Guru</button>
     <button type="button" data-tab="piket">Piket</button>
+    <button type="button" data-tab="kokurikuler">Kokurikuler</button>
     <span class="thumb"></span>
   </div>
   <div class="search-wrap">
-    <input type="text" id="searchInput" placeholder="Cari kelas, guru, atau guru piket…" autocomplete="off">
+    <input type="text" id="searchInput" placeholder="Cari kelas, guru, piket, atau kokurikuler…" autocomplete="off">
   </div>
   <div class="count" id="countLabel"></div>
 </div>
@@ -587,6 +628,58 @@ const JOBDESC = [
   {waktu:"Menerima tamu/keperluan dinas", tugas:"Menerima dan melayani tamu sekolah, orang tua/wali siswa, atau pihak lain sesuai keperluan, serta mengarahkan ke Kepala Sekolah/Wakil Kepala Sekolah terkait apabila diperlukan."},
   {waktu:"Akhir jam pelajaran/pulang sekolah", tugas:"Memastikan seluruh siswa pulang dengan tertib dan aman, mengecek keadaan ruang kelas dan fasilitas sekolah, mencatat kejadian penting pada buku piket, serta melaporkan hasil pelaksanaan tugas piket kepada Kepala Sekolah atau Wakil Kepala Sekolah Bidang Kesiswaan."}
 ];
+
+const KOKURIKULER = {
+  info: {
+    judul: "Kokurikuler Sistem Blok — \"Peduli & Berbagi\" dan \"Hidup Hemat & Produktif\"",
+    ringkas: "Kegiatan kokurikuler blok penuh menjelang akhir Semester Ganjil, menguatkan <b>8 Dimensi Profil Lulusan</b> (Permendikdasmen No. 10 Tahun 2025) menggantikan P5, mengacu Permendikdasmen No. 13 Tahun 2025 &amp; Panduan Kokurikuler BSKAP 2025.",
+    meta: ["Senin–Kamis, 14–17 Des 2026", "Sasaran: Kelas X &amp; XI", "Sistem Blok Penuh (± 24 JP)", "Rapor: Jumat, 18 Des 2026*"]
+  },
+  hari: [
+    {
+      tanggal: "Senin, 14 Des 2026", judul: "Pembukaan & Orientasi", tema: "peduli",
+      temaLabel: "Peduli & Berbagi",
+      kegiatan: [
+        {jam:"07.00–07.30", teks:"Upacara pembukaan blok kokurikuler & senam sehat bersama"},
+        {jam:"07.30–09.30", teks:"Pembagian kelompok, sosialisasi tema & lembar kerja proyek"},
+        {jam:"09.45–12.00", teks:"Diskusi kelompok: identifikasi kebutuhan sasaran & rencana aksi"},
+        {jam:"13.00–15.00", teks:"Persiapan teknis: donasi, pengemasan paket berbagi, logistik"}
+      ],
+      dims: ["Keimanan & Ketakwaan","Kolaborasi","Kewargaan","Penalaran Kritis","Kemandirian"]
+    },
+    {
+      tanggal: "Selasa, 15 Des 2026", judul: "Aksi Lapangan", tema: "peduli",
+      temaLabel: "Peduli & Berbagi",
+      kegiatan: [
+        {jam:"07.00–07.30", teks:"Briefing keberangkatan, doa, pembagian rombongan & jalur"},
+        {jam:"07.30–11.30", teks:"Aksi sosial di lokasi sasaran: bakti sosial & penyerahan donasi"},
+        {jam:"13.00–14.30", teks:"Refleksi kelompok: jurnal/dokumentasi & penilaian sikap"}
+      ],
+      dims: ["Kewargaan","Kolaborasi","Penalaran Kritis","Komunikasi"]
+    },
+    {
+      tanggal: "Rabu, 16 Des 2026", judul: "Hidup Hemat & Produktif", tema: "hemat",
+      temaLabel: "Hidup Hemat & Produktif",
+      kegiatan: [
+        {jam:"07.00–09.00", teks:"Materi literasi keuangan: kelola uang saku & menabung"},
+        {jam:"09.15–12.00", teks:"Praktik produktif sesuai kompetensi keahlian per jurusan"},
+        {jam:"13.00–15.00", teks:"Kalkulasi biaya produksi & simulasi harga jual"}
+      ],
+      dims: ["Kemandirian","Penalaran Kritis","Kreativitas"]
+    },
+    {
+      tanggal: "Kamis, 17 Des 2026", judul: "Gelar Karya & Penutupan", tema: "gelar",
+      temaLabel: "Kedua Tema",
+      kegiatan: [
+        {jam:"07.00–09.00", teks:"Penataan stan pameran hasil karya kedua tema"},
+        {jam:"09.00–11.00", teks:"Gelar karya, simulasi jual-beli & penilaian tamu undangan"},
+        {jam:"11.00–12.00", teks:"Refleksi akhir, penilaian profil lulusan, penyerahan sertifikat"},
+        {jam:"12.00–selesai", teks:"Penutupan & doa bersama"}
+      ],
+      dims: ["Seluruh 8 Dimensi Profil Lulusan"]
+    }
+  ]
+};
 
 /* ---------------- State & rendering ---------------- */
 let activeTab = "kelas";
@@ -720,8 +813,47 @@ function renderPiket(){
   updateClock();
 }
 
+function renderKokurikuler(){
+  const q = $search.value.trim().toLowerCase();
+  const info = KOKURIKULER.info;
+
+  const introHTML = `
+    <div class="koku-intro">
+      <div>${info.ringkas}</div>
+      <div class="koku-meta">${info.meta.map(m=>`<span>${m}</span>`).join("")}</div>
+    </div>
+  `;
+
+  const hariFiltered = KOKURIKULER.hari.map(h=>{
+    const headerMatch = (h.judul+" "+h.temaLabel+" "+h.tanggal).toLowerCase().includes(q);
+    const kegiatan = headerMatch ? h.kegiatan : h.kegiatan.filter(k => k.teks.toLowerCase().includes(q));
+    return {...h, kegiatan, match: headerMatch || kegiatan.length > 0};
+  }).filter(h => h.match);
+
+  const hariHTML = hariFiltered.map((h,idx)=>`
+    <details class="day-block" ${idx===0 ? 'open' : ''}>
+      <summary>
+        ${h.tanggal} — ${h.judul}
+        <span class="koku-tema-tag ${h.tema}">${h.temaLabel}</span>
+        <span class="day-count">${h.kegiatan.length} kegiatan</span>
+      </summary>
+      <ol class="koku-list">${h.kegiatan.map(k=>`<li><span class="jam">${k.jam}</span><span>${k.teks}</span></li>`).join("")}</ol>
+      <div class="koku-dims">${h.dims.map(d=>`<span>${d}</span>`).join("")}</div>
+    </details>
+  `).join("");
+
+  $main.innerHTML = `
+    <section class="tier"><h2>Program Kokurikuler · Sistem Blok</h2>${introHTML}</section>
+    <section class="tier"><h2>Garis Besar Kegiatan per Hari</h2><div class="week-wrap">${
+      hariHTML || `<div class="empty">Tidak ada kegiatan yang cocok dengan pencarian.</div>`
+    }</div></section>
+  `;
+  $count.textContent = `4 hari kegiatan · 14–17 Des 2026`;
+}
+
 function render(){
   if(activeTab === "piket") renderPiket();
+  else if(activeTab === "kokurikuler") renderKokurikuler();
   else renderGrid();
 }
 
@@ -737,7 +869,7 @@ setInterval(()=>{
 setInterval(()=>{ if(activeTab === "piket") renderPiket(); }, 60000);
 
 /* ---------------- Tabs ---------------- */
-const TAB_ORDER = ["kelas","guru","piket"];
+const TAB_ORDER = ["kelas","guru","piket","kokurikuler"];
 $tabs.querySelectorAll("button[data-tab]").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     $tabs.querySelectorAll("button[data-tab]").forEach(b=>b.classList.remove("active"));
@@ -745,7 +877,9 @@ $tabs.querySelectorAll("button[data-tab]").forEach(btn=>{
     activeTab = btn.dataset.tab;
     $tabs.style.setProperty("--i", TAB_ORDER.indexOf(activeTab));
     $search.value = "";
-    $search.placeholder = activeTab === "piket" ? "Cari nama guru piket…" : "Cari kelas atau nama guru…";
+    $search.placeholder = activeTab === "piket" ? "Cari nama guru piket…"
+      : activeTab === "kokurikuler" ? "Cari kegiatan atau tema…"
+      : "Cari kelas atau nama guru…";
     render();
   });
 });
